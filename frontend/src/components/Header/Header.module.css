@@ -1,0 +1,189 @@
+
+.header {
+    position: relative;
+    height: 4rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 40rem;
+}
+
+.menu_block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: larger;
+}
+
+.menu_icon {
+    height: 2.2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    border-radius: 0.4rem;
+}
+
+
+.dropdown_menu {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 10px 0;
+    width: 200px;
+    z-index: 100;
+}
+
+.dropdown_menu li {
+    list-style: none;
+    padding: 10px 15px;
+    transition: background 0.3s ease-in-out;
+}
+
+.dropdown_menu li:hover {
+    background: #9ab8d9;
+}
+
+.dropdown_menu li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+.menu_icon:active {
+    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6),
+    inset 2px 2px 3px rgba(0, 0, 0, 0.8);
+}
+
+.search_block {
+    display: flex;
+    align-items: stretch;
+    height: 2.2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    border-radius: 0.4rem;
+}
+
+.search_input {
+    width: 20rem;
+    border-bottom-left-radius: 0.4rem;
+    border-top-left-radius: 0.4rem;
+
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 1.1rem;
+}
+
+.clear_button {
+    background: white;
+    padding: 8px 6px 6px 6px;
+    position: relative;
+    cursor: pointer;
+
+}
+
+.clear_button::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: 0;
+    height: 60%;
+    width: 1px;
+    background: grey;
+}
+
+
+.clear_button img {
+    width: 1.3rem;
+}
+
+.search_button {
+    padding: 10px;
+    background: white;
+    border-bottom-right-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
+    cursor: pointer;
+}
+
+.search_icon {
+    width: 1.1rem;
+    cursor: pointer;
+}
+
+.logo_register {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+}
+
+.logo_register span {
+    cursor: pointer;
+}
+
+.user_icon {
+    width: 1.8rem;
+    border-radius: 50%;
+}
+
+.apartments_logo_block {
+    max-width: 30rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    gap: 1rem;
+    font-size: 1.6rem;
+    color: #c3f3ec;
+}
+
+.apartments_logo_block.animated {
+    animation: pulse 2s infinite, rotate 2s infinite linear;
+}
+
+@keyframes rotate {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-20px);
+    }
+    50% {
+        transform: translateX(0);
+    }
+    75% {
+        transform: translateX(20px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        color: #c3f3ec;
+    }
+
+    50% {
+        color: #f87373;
+    }
+
+    100% {
+        color: #c3f3ec;
+    }
+}
+
+.apartments_logo_block:hover {
+    width: 20rem;
+    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, 0.6),
+    inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+}
+
+
+
+
+

@@ -1,0 +1,39 @@
+
+.form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    max-width: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    border: 1px solid #ccc;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 3px;
+    color: black;
+}
+
+.form button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 8px 0;
+    background-color: #56a4ec;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.form input {
+    width: 260px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: white;
+}
