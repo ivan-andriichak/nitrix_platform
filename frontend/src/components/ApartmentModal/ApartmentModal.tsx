@@ -1,14 +1,18 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {addApartment, AppDispatch, fetchApartments, updateApartment} from '../../store';
-import styles from './ApartmentModal.module.css';
+import css from './ApartmentModal.module.css';
 import {Apartment, FormDataState} from "../../interfaces/apartment.types.ts";
+import {BASE_URL} from "../../services/api.ts";
 
 interface ApartmentModalProps {
   apartment?: Apartment,
   onClose: () => void,
   onSave?: (apartment: Apartment) => Promise<void>
 }
+
+
+
 
 const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,15 +29,18 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
   });
 
   useEffect(() => {
-    setFormData({
-      title: apartment?.title || '',
-      description: apartment?.description || '',
-      price: apartment?.price || 10,
-      rooms: apartment?.rooms || 1,
-      photos: [],
-      photoPreviews: apartment?.photos || [],
-    });
+    if (apartment) {
+      setFormData({
+        title: apartment.title,
+        description: apartment.description,
+        price: apartment.price,
+        rooms: apartment.rooms,
+        photos: [],
+        photoPreviews: apartment.photos || [],
+      });
+    }
   }, [apartment]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,7 +61,6 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
     }
   };
 
-  // Функція для видалення прев'ю фото при редагуванні
   const handleDeletePreview = (index: number) => {
     setFormData((prev: FormDataState) => {
       const newPreviews = [...prev.photoPreviews];
@@ -63,27 +69,14 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
       if (!removedPreview.startsWith('blob:')) {
         setPhotosToRemove(prevRemove => [...prevRemove, removedPreview]);
       } else {
-
-        const existingCount = prev.photoPreviews.filter((url: string) => !url.startsWith('blob:')).length;
-        if (index >= existingCount) {
-          const newFileIndex = index - existingCount;
-          const newPhotos = [...prev.photos];
-          if (newFileIndex < newPhotos.length) {
-            newPhotos.splice(newFileIndex, 1);
-            return {
-              ...prev,
-              photoPreviews: newPreviews,
-              photos: newPhotos,
-            };
-          }
-        }
+        const newPhotos = prev.photos.filter((_, i) => i !== index - prev.photoPreviews.filter(url => !url.startsWith('blob:')).length);
+        return { ...prev, photoPreviews: newPreviews, photos: newPhotos };
       }
-      return {
-        ...prev,
-        photoPreviews: newPreviews,
-      };
+
+      return { ...prev, photoPreviews: newPreviews };
     });
   };
+
 
   const [success, setSuccess] = useState(false);
 
@@ -122,12 +115,12 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
   };
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <div className={css.modalOverlay} onClick={onClose}>
+      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
         <h2>{apartment ? 'Редагувати квартиру' : 'Додати квартиру'}</h2>
         <form onSubmit={handleSubmit}>
           <input
-            className={styles.input}
+            className={css.input}
             name="title"
             value={formData.title}
             onChange={handleChange}
@@ -135,7 +128,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             required
           />
           <textarea
-            className={styles.input}
+            className={css.input}
             name="description"
             value={formData.description}
             onChange={handleChange}
@@ -143,7 +136,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             required
           />
           <input
-            className={styles.input}
+            className={css.input}
             name="price"
             type="number"
             value={formData.price}
@@ -152,7 +145,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             required
           />
           <select
-            className={styles.input}
+            className={css.input}
             name="rooms"
             value={formData.rooms}
             onChange={handleChange}
@@ -168,17 +161,17 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
           <label htmlFor="photos">Завантажити фото:</label>
           <input type="file" name="photos" id="photos" multiple onChange={handlePhotoChange}/>
 
-          <div className={styles.photoPreviewsContainer}>
+          <div className={css.photoPreviewsContainer}>
             {formData.photoPreviews.map((photo, index) => (
-              <div key={index} className={styles.photoPreviewWrapper}>
+              <div key={index} className={css.photoPreviewWrapper}>
                 <img
-                  src={photo}
+                  src={photo.startsWith('blob:') ? photo : `${BASE_URL}${photo}`}
                   alt={`Перегляд: ${index}`}
-                  className={styles.photoPreview}
+                  className={css.photoPreview}
                 />
                 <button
                   type="button"
-                  className={styles.deletePhotoButton}
+                  className={css.deletePhotoButton}
                   onClick={() => handleDeletePreview(index)}
                 >
                   Видалити
@@ -187,23 +180,23 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             ))}
           </div>
 
-          <div className={styles.buttonsContainer}>
+          <div className={css.buttonsContainer}>
             <button
               type="button"
               onClick={onClose}
-              className={styles.cancelButton}
+              className={css.cancelButton}
               disabled={success}
             >
               Закрити
             </button>
-            <button type="submit" className={styles.saveButton} disabled={success}>
+            <button type="submit" className={css.saveButton} disabled={success}>
               {apartment ? 'Змінити' : 'Додати'}
             </button>
           </div>
           {success && (
-            <p>
-              Квартира {apartment ? 'updated' : 'added'} successfully!
-            </p>
+            <h3>
+              Квартира {apartment ? 'змінена' : 'додана'} успішно!
+            </h3>
           )}
         </form>
       </div>

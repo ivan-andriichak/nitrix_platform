@@ -27,12 +27,12 @@
     font-size: 16px;
 }
 
-.buttonsContainer {
+.buttonsContainer, .buttonContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin: 10px;
+    margin: 1rem;
 }
 
 .cancelButton {
@@ -73,12 +73,11 @@
 
 .photoPreviewWrapper {
     position: relative;
-    display: inline-block;
 }
 
 .photoPreview {
-    width: 150px;
-    height: auto;
+    width: 10rem;
+    height: 10rem;
     object-fit: cover;
     border-radius: 5px;
 }
@@ -101,10 +100,3 @@
     opacity: 1;
 }
 
-.buttonContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-}
