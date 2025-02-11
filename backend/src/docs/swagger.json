@@ -1,0 +1,381 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API for managing apartments",
+    "version": "1.0.8",
+    "title": "Apartment Rental API",
+    "contact": {
+      "email": "test@gmail.com"
+    }
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter your Bearer token in the format `Bearer <token>`"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "GET",
+      "description": "GET endpoints"
+    },
+    {
+      "name": "POST",
+      "description": "POST endpoints"
+    },
+    {
+      "name": "PUT",
+      "description": "PUT endpoints"
+    },
+    {
+      "name": "DELETE",
+      "description": "DELETE endpoints"
+    }
+  ],
+  "paths": {
+    "/apartments": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "Get all apartments",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of apartments",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Apartment"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "POST"
+        ],
+        "summary": "Add a new apartment",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "formData",
+            "description": "Title of the apartment",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "description": "Description of the apartment",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "description": "Price of the apartment",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "rooms",
+            "in": "formData",
+            "description": "Number of rooms",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "photos",
+            "in": "formData",
+            "description": "Photos to upload",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Apartment created",
+            "schema": {
+              "$ref": "#/definitions/Apartment"
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        }
+      }
+    },
+    "/apartments/{id}": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "Get an apartment by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Apartment details",
+            "schema": {
+              "$ref": "#/definitions/Apartment"
+            }
+          },
+          "404": {
+            "description": "Apartment not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "PUT"
+        ],
+        "summary": "Update an apartment",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "in": "formData",
+            "description": "Title of the apartment",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "description": "Description of the apartment",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "description": "Price of the apartment",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "rooms",
+            "in": "formData",
+            "description": "Number of rooms",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "photos",
+            "in": "formData",
+            "description": "New photos to upload",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Apartment updated",
+            "schema": {
+              "$ref": "#/definitions/Apartment"
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          },
+          "404": {
+            "description": "Apartment not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DELETE"
+        ],
+        "summary": "Delete an apartment",
+        "description": "This can only be done by the apartment owner.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Apartment deleted",
+            "schema": {
+              "$ref": "#/definitions/Apartment"
+            }
+          },
+          "404": {
+            "description": "Apartment not found"
+          }
+        }
+      }
+    },
+    "/apartments/{id}/photos": {
+      "post": {
+        "tags": [
+          "POST"
+        ],
+        "summary": "Add photos to an apartment",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "photos",
+            "in": "formData",
+            "description": "New photos to upload",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Photos added",
+            "schema": {
+              "$ref": "#/definitions/Apartment"
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        }
+      }
+    },
+    "/apartments/deleteAll": {
+      "delete": {
+        "tags": [
+          "DELETE"
+        ],
+        "summary": "Delete all apartments (admin only)",
+        "description": "This operation allows administrators to delete all apartments in the system.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All apartments deleted"
+          },
+          "403": {
+            "description": "Forbidden - Only admins can perform this action"
+          },
+          "500": {
+            "description": "Error deleting all apartments"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Apartment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "The unique identifier for an apartment"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "rooms": {
+          "type": "number"
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "price",
+        "rooms"
+      ]
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "https://swagger.io"
+  }
+}

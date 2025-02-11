@@ -1,9 +1,9 @@
-import React, {FC, useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
-import {addApartment, AppDispatch, fetchApartments, updateApartment} from '../../store';
+import React, { FC, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addApartment, AppDispatch, fetchApartments, updateApartment } from '../../store';
 import css from './ApartmentModal.module.css';
-import {Apartment, FormDataState} from "../../interfaces/apartment.types.ts";
-import {BASE_URL} from "../../services/api.ts";
+import { Apartment, FormDataState } from '../../interfaces/apartment.types.ts';
+import { api } from '../../services/api.ts';
 
 interface ApartmentModalProps {
   apartment?: Apartment,
@@ -113,7 +113,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
       console.error('Error saving apartment:', error);
     }
   };
-
+// ____________________________________________________________________
   return (
     <div className={css.modalOverlay} onClick={onClose}>
       <div className={css.modal} onClick={(e) => e.stopPropagation()}>
@@ -165,7 +165,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             {formData.photoPreviews.map((photo, index) => (
               <div key={index} className={css.photoPreviewWrapper}>
                 <img
-                  src={photo.startsWith('blob:') ? photo : `${BASE_URL}${photo}`}
+                  src={photo.startsWith('blob:') ? photo : `${api}${photo}`}
                   alt={`Перегляд: ${index}`}
                   className={css.photoPreview}
                 />

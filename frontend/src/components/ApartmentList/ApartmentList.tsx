@@ -1,11 +1,11 @@
-import {FC, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {addApartment, AppDispatch, deleteApartment, fetchApartments, RootState, updateApartment} from '../../store';
+import { FC, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addApartment, AppDispatch, deleteApartment, fetchApartments, RootState, updateApartment } from '../../store';
 import ApartmentModal from '../ApartmentModal/ApartmentModal';
 import css from './ApartmentList.module.css';
 import clear_icon from '../../images/SVG/clear_icon.svg';
-import {Apartment} from "../../interfaces/apartment.types.ts";
-import {BASE_URL} from "../../services/api.ts";
+import { Apartment } from '../../interfaces/apartment.types.ts';
+import { api } from '../../services/api.ts';
 
 interface GenresProps {
   onClose?: () => void;
@@ -57,6 +57,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
     if (apartment.id) {
       await dispatch(updateApartment(apartment));
     } else {
+      console.log(apartment)
       await dispatch(addApartment(apartment));
     }
     setIsModalOpen(false);
@@ -117,7 +118,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                     {apartment.photos.map((photo: string, index: number) => (
                       <img
                         key={photo}
-                        src={`${BASE_URL}${photo}`}
+                        src={`${api}${photo}`}
                         alt={`photo: ${apartment.title}`}
                         className={css.apartmentImage}
                         onClick={() => handlePhotoClick(photo, apartment.id, index)}
@@ -141,7 +142,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                                   disabled={photoIndex === 0}>
                             ❮
                           </button>
-                          <img src={`${BASE_URL}${selectedPhoto.photo}`} alt="Enlarged" className={css.enlargedPhoto}/>
+                          <img src={`${api}${selectedPhoto.photo}`} alt="Enlarged" className={css.enlargedPhoto}/>
                           <button
                             className={css.photoModalNext}
                             onClick={handleNextPhoto}
