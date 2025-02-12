@@ -33,10 +33,11 @@ const limiter = rateLimit({
     message: 'Too Many Requests',
   },
 });
+
 app.use(limiter);
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-app.use(express.urlencoded({ extended: true })); // Декодує x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/apartments', limiter, apartmentRouter);
 
