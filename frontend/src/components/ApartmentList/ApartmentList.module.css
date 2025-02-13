@@ -1,6 +1,7 @@
 .apartmentListContainer {
     position: relative;
     max-height: 85vh;
+    min-height: 50rem;
     overflow-y: auto;
     padding: 0.5rem;
     max-width: 1000px;
@@ -39,6 +40,14 @@
     top: 0;
     right: 2px;
     z-index: 999;
+}
+
+.filters input {
+    padding: 10px;
+    margin: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
 }
 
 .apartmentListItem {

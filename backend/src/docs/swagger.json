@@ -55,7 +55,37 @@
         "tags": [
           "GET"
         ],
-        "summary": "Get all apartments",
+        "summary": "Get all apartments with filtering options",
+        "parameters": [
+          {
+            "name": "minPrice",
+            "in": "query",
+            "description": "Minimum price of the apartment",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "description": "Maximum price of the apartment",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "rooms",
+            "in": "query",
+            "description": "Number of rooms in the apartment",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Title of the apartment (partial match)",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "security": [
           {
             "BearerAuth": []
@@ -63,7 +93,7 @@
         ],
         "responses": {
           "200": {
-            "description": "List of apartments",
+            "description": "List of apartments matching the filter",
             "schema": {
               "type": "array",
               "items": {
@@ -315,7 +345,7 @@
     "/apartments/deleteAll": {
       "delete": {
         "tags": [
-          "DELETE"
+          "DELETE ALL (TEST!)"
         ],
         "summary": "Delete all apartments (admin only)",
         "description": "This operation allows administrators to delete all apartments in the system.",

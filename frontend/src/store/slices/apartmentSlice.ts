@@ -14,11 +14,12 @@ const multipartHeaders = {
 };
 
 
-// 📌 Fetching all apartments
-export const fetchApartments = createAsyncThunk<Apartment[], void>(
+/// 📌 Fetching all apartments with filters
+export const fetchApartments = createAsyncThunk<Apartment[], { priceMin?: string; priceMax?: string; rooms?: string }>(
   'apartments/fetchAllApartments',
-  async () => {
-    const response = await api.get('/apartments');
+  async (filters = {}) => {
+    const queryParams = new URLSearchParams(filters).toString();
+    const response = await api.get(`/apartments?${queryParams}`);
     return response.data.map((apt: ApiApartment) => ({
       ...apt,
       id: apt._id,

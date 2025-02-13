@@ -24,9 +24,19 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
 
 
+  const [priceMin, setPriceMin] = useState('');
+  const [priceMax, setPriceMax] = useState('');
+  const [rooms, setRooms] = useState('');
+
+
   useEffect(() => {
-    dispatch(fetchApartments());
+    dispatch(fetchApartments({}));
   }, [dispatch]);
+
+  const applyFilters = () => {
+    dispatch(fetchApartments({ priceMin, priceMax, rooms }));
+  };
+
 
   console.log(apartments);
 
@@ -109,8 +119,34 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
           Додати квартиру
         </button>
 
+        <div className={css.filters}>
+          <input
+            placeholder="Мін. ціна"
+            value={priceMin}
+            onChange={(e) => setPriceMin(e.target.value)}
+          />
+          <input
+            placeholder="Макс. ціна"
+            value={priceMax}
+            onChange={(e) => setPriceMax(e.target.value)}
+          />
+         <input
+            type="number"
+            placeholder="Кількість кімнат"
+            value={rooms}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (value >= 0 && value <= 3) {
+                setRooms(e.target.value);
+              }
+            }}
+          />
+         <button style={{ margin: '5px', padding: '10px 20px', border: 'none', borderRadius: '4px', backgroundColor: '#4684c5', color: 'white', cursor: 'pointer', fontSize: '1rem', transition: 'background-color 0.3s' }} onClick={applyFilters}>Застосувати</button>
+        </div>
+
+
         <button className={css.closeButton} onClick={onClose}>
-          <img src={clear_icon} alt="clear_icon"/>
+          <img src={clear_icon} alt="clear_icon" />
         </button>
         <div>
           <ul>
@@ -120,7 +156,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                   <h3 className={css.apartmentTitle}>{apartment.title}</h3>
                 </div>
 
-                <div className={css.buttonContainer}  style={{ display: isPhotoModalOpen ? 'none' : 'block' }}>
+                <div className={css.buttonContainer} style={{ display: isPhotoModalOpen ? 'none' : 'block' }}>
                   <button className={css.editButton} onClick={() => handleEdit(apartment)}>
                     Редагувати
                   </button>
@@ -223,4 +259,4 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   );
 };
 
-export {ApartmentList};
+export { ApartmentList };

@@ -111,7 +111,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
       setTimeout(async () => {
         setSuccess(false);
         onClose();
-        await dispatch(fetchApartments());
+        await dispatch(fetchApartments({}));
       }, 2000);
     } catch (error) {
       console.error('Error saving apartment:', error);
@@ -129,6 +129,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
             value={formData.title}
             onChange={handleChange}
             placeholder="Заголовок"
+            maxLength={90}
             required
           />
           <textarea
@@ -137,6 +138,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
             value={formData.description}
             onChange={handleChange}
             placeholder="Опис"
+            maxLength={335}
             required
           />
           <input
