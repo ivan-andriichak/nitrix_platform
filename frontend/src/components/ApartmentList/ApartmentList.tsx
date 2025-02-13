@@ -182,7 +182,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
               {/* #region apartmentPhotos */}
               {apartment.photos && apartment.photos.length > 0 && (
                 <div className={css.apartmentPhotos}>
-                  {apartment.photos.map((photo: string, index: number) => (
+                  {apartment.photos.slice(0, 10).map((photo: string, index: number)  => (
                     <img
                       key={photo}
                       src={`${BASE_URL}${photo}`}
