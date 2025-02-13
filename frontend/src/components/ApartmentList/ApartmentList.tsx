@@ -1,12 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addApartment, AppDispatch, deleteApartment, fetchApartments, RootState, updateApartment } from '../../store';
+
 import ApartmentModal from '../ApartmentModal/ApartmentModal';
 import css from './ApartmentList.module.css';
 import clear_icon from '../../images/SVG/clear_icon.svg';
 import { Apartment } from '../../interfaces/apartment.types.ts';
+import { BASE_URL } from '../../services/api.ts';
 
-const BASE_URL = 'http://localhost:5000';
 
 interface GenresProps {
   onClose?: () => void;
@@ -23,11 +24,9 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   const [photoIndex, setPhotoIndex] = useState<number | null>(null);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
 
-
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
   const [rooms, setRooms] = useState('');
-
 
   useEffect(() => {
     dispatch(fetchApartments({}));
@@ -36,9 +35,6 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   const applyFilters = () => {
     dispatch(fetchApartments({ priceMin, priceMax, rooms }));
   };
-
-
-  console.log(apartments);
 
   if (loading) return <p className={css.loadingMessage}>Loading...</p>;
   if (error) return <p className={css.errorMessage}>Error: {error}</p>;
@@ -70,10 +66,16 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
     if (apartment.id) {
       await dispatch(updateApartment(apartment));
     } else {
-      console.log(apartment)
       await dispatch(addApartment(apartment));
     }
     setIsModalOpen(false);
+  };
+
+  const resetFilters = () => {
+    setPriceMin('');
+    setPriceMax('');
+    setRooms('');
+    dispatch(fetchApartments({}));
   };
 
   const handlePhotoClick = (photo: string, apartmentId: string, index: number) => {
@@ -83,12 +85,12 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   };
 
   const handleClosePhotoModal = () => {
-    setIsPhotoModalOpen(false);  // Закриваємо фото модалку
+    setIsPhotoModalOpen(false);
   };
 
   const handleNextPhoto = () => {
     if (selectedPhoto?.apartmentId) {
-      const apartment = apartments.find((apartment) => apartment.id === selectedPhoto.apartmentId);
+      const apartment = apartments.find((a) => a.id === selectedPhoto.apartmentId);
       if (apartment && apartment.photos && photoIndex !== null) {
         const nextIndex = photoIndex + 1;
         if (nextIndex < apartment.photos.length) {
@@ -101,7 +103,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
 
   const handlePrevPhoto = () => {
     if (selectedPhoto?.apartmentId) {
-      const apartment = apartments.find((apartment) => apartment.id === selectedPhoto.apartmentId);
+      const apartment = apartments.find((a) => a.id === selectedPhoto.apartmentId);
       if (apartment && apartment.photos && photoIndex !== null) {
         const prevIndex = photoIndex - 1;
         if (prevIndex >= 0) {
@@ -120,141 +122,153 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
         </button>
 
         <div className={css.filters}>
+          <input placeholder="Мін. ціна" value={priceMin} onChange={(e) => setPriceMin(e.target.value)} />
+          <input placeholder="Макс. ціна" value={priceMax} onChange={(e) => setPriceMax(e.target.value)} />
           <input
-            placeholder="Мін. ціна"
-            value={priceMin}
-            onChange={(e) => setPriceMin(e.target.value)}
-          />
-          <input
-            placeholder="Макс. ціна"
-            value={priceMax}
-            onChange={(e) => setPriceMax(e.target.value)}
-          />
-         <input
             type="number"
             placeholder="Кількість кімнат"
             value={rooms}
             onChange={(e) => {
               const value = parseInt(e.target.value, 10);
-              if (value >= 0 && value <= 3) {
+              if (!isNaN(value) && value > 0 && value <= 3) {
                 setRooms(e.target.value);
               }
             }}
           />
-         <button style={{ margin: '5px', padding: '10px 20px', border: 'none', borderRadius: '4px', backgroundColor: '#4684c5', color: 'white', cursor: 'pointer', fontSize: '1rem', transition: 'background-color 0.3s' }} onClick={applyFilters}>Застосувати</button>
-        </div>
+          <button style={{
+            margin: '5px',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '4px',
+            backgroundColor: '#4684c5',
+            color: 'white',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            transition: 'background-color 0.3s',
+          }} onClick={applyFilters}>Застосувати
+          </button>
 
+          <button style={{
+            margin: '5px',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '4px',
+            backgroundColor: '#4684c5',
+            color: 'white',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            transition: 'background-color 0.3s',
+          }} onClick={resetFilters}>Очистити
+          </button>
+        </div>
 
         <button className={css.closeButton} onClick={onClose}>
           <img src={clear_icon} alt="clear_icon" />
         </button>
-        <div>
-          <ul>
-            {apartments.map((apartment) => (
-              <li key={apartment.id} className={css.apartmentListItem}>
-                <div>
-                  <h3 className={css.apartmentTitle}>{apartment.title}</h3>
-                </div>
 
-                <div className={css.buttonContainer} style={{ display: isPhotoModalOpen ? 'none' : 'block' }}>
-                  <button className={css.editButton} onClick={() => handleEdit(apartment)}>
-                    Редагувати
-                  </button>
-                  <button className={css.deleteButton} onClick={() => handleDelete(apartment.id)}>
-                    Видалити
-                  </button>
-                </div>
-                {/* #region apartmentPhotos */}
-                {apartment.photos && apartment.photos.length > 0 && (
-                  <div className={css.apartmentPhotos}>
-                    {apartment.photos.map((photo: string, index: number) => (
-                      <img
-                        key={photo}
-                        src={`${BASE_URL}${photo}`}
-                        alt={`photo: ${apartment.title}`}
-                        className={css.apartmentImage}
-                        onClick={() => handlePhotoClick(photo, apartment.id, index)}
-                      />
-                    ))}
-                    {/* #endregion */}
+        <ul>
+          {apartments.map((apartment) => (
+            <li key={apartment.id} className={css.apartmentListItem}>
+              <h3 className={css.apartmentTitle}>{apartment.title}</h3>
 
-                    {selectedPhoto?.apartmentId === apartment.id && isPhotoModalOpen && (
-                      <div className={css.photoModalContainer} onClick={handleClosePhotoModal}>
+              <div className={css.buttonContainer} style={{ display: isPhotoModalOpen ? 'none' : 'block' }}>
+                <button className={css.editButton} onClick={() => handleEdit(apartment)}>
+                  Редагувати
+                </button>
+                <button className={css.deleteButton} onClick={() => handleDelete(apartment.id)}>
+                  Видалити
+                </button>
+              </div>
+              {/* #region apartmentPhotos */}
+              {apartment.photos && apartment.photos.length > 0 && (
+                <div className={css.apartmentPhotos}>
+                  {apartment.photos.map((photo: string, index: number) => (
+                    <img
+                      key={photo}
+                      src={`${BASE_URL}${photo}`}
+                      alt={`photo: ${apartment.title}`}
+                      className={`${css.apartmentImage} ${selectedPhoto?.photo === photo ? css.activePhoto : ''}`}
+                      onClick={() => handlePhotoClick(photo, apartment.id, index)}
+                    />
+                  ))}
+                  {/* #endregion */}
 
-                        {/* #region photoModal */}
-                        <div className={css.photoModal} onClick={(e) => e.stopPropagation()}>
-                          <button className={css.photoModalPrev}
-                                  onClick={handlePrevPhoto}
-                                  style={{
-                                    fontSize: '2rem',
-                                    margin: '5px',
-                                    opacity: photoIndex === 0 ? 0.5 : 1,
-                                    cursor: photoIndex === 0 ? 'not-allowed' : 'pointer',
-                                  }}
-                                  disabled={photoIndex === 0}>
-                            ❮
-                          </button>
+                  {selectedPhoto?.apartmentId === apartment.id && isPhotoModalOpen && (
+                    <div className={css.photoModalContainer} onClick={handleClosePhotoModal}>
 
-                          {selectedPhoto && selectedPhoto.photo && (
-                            <img src={`${BASE_URL}${selectedPhoto.photo}`} alt="Enlarged"
-                                 className={css.enlargedPhoto} />
-                          )}
+                      {/* #region photoModal */}
+                      <div className={css.photoModal} onClick={(e) => e.stopPropagation()}>
+                        <button className={css.photoModalPrev}
+                                onClick={handlePrevPhoto}
+                                style={{
+                                  fontSize: '2rem',
+                                  margin: '5px',
+                                  opacity: photoIndex === 0 ? 0.5 : 1,
+                                  cursor: photoIndex === 0 ? 'not-allowed' : 'pointer',
+                                }}
+                                disabled={photoIndex === 0}>
+                          ❮
+                        </button>
 
-                          <button
-                            className={css.photoModalNext}
-                            onClick={handleNextPhoto}
-                            style={{
-                              fontSize: '2rem',
-                              margin: '5px',
-                              opacity: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 0.5 : 1,
-                              cursor: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 'not-allowed' : 'pointer',
-                            }}
-                            disabled={photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1)}
-                          >
-                            ❯
-                          </button>
-                        </div>
-                        {/* #region apartmentInfo*/}
-                        <div className={css.apartmentInfo}>
-                          <div className={css.apartmentInfoText}>
-                            <h3 className={css.apartmentTitle}>{apartment.title}</h3>
-                            <p className={css.apartmentDescription}>{apartment.description}</p>
-                            <p className={css.apartmentDescription}>Ціна: ${apartment.price}</p>
-                            <p className={css.apartmentDescription}>Кімнати : {apartment.rooms}</p>
-                          </div>
+                        {selectedPhoto && selectedPhoto.photo && (
+                          <img src={`${BASE_URL}${selectedPhoto.photo}`} alt="Enlarged"
+                               className={css.enlargedPhoto} />
+                        )}
 
-                          <div className={css.buttonContainer}>
-                            <button className={css.editButton} onClick={() => handleEdit(apartment)}>
-                              Редагувати
-                            </button>
-                            <button className={css.deleteButton} onClick={() => handleDelete(apartment.id)}>
-                              Видалити
-                            </button>
-                          </div>
-                        </div>
-                        {/* #endregion */}
+                        <button
+                          className={css.photoModalNext}
+                          onClick={handleNextPhoto}
+                          style={{
+                            fontSize: '2rem',
+                            margin: '5px',
+                            opacity: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 0.5 : 1,
+                            cursor: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 'not-allowed' : 'pointer',
+                          }}
+                          disabled={photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1)}
+                        >
+                          ❯
+                        </button>
                       </div>
-                    )}
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+                      {/* #region apartmentInfo*/}
+                      <div className={css.apartmentInfo}>
+                        <div className={css.apartmentInfoText}>
+                          <h3 className={css.apartmentTitle}>{apartment.title}</h3>
+                          <p className={css.apartmentDescription}>{apartment.description}</p>
+                          <p className={css.apartmentDescription}>Ціна: ${apartment.price}</p>
+                          <p className={css.apartmentDescription}>Кімнати : {apartment.rooms}</p>
+                        </div>
 
-        {/* #region modalOverlay*/}
-        {isModalOpen && (
-          <div className={css.modalOverlay}>
-            <ApartmentModal
-              apartment={editingApartment}
-              onClose={() => setIsModalOpen(false)}
-              onSave={handleSave}
-            />
-          </div>
-        )}
-        {/* #endregion */}
-
+                        <div className={css.buttonContainer}>
+                          <button className={css.editButton} onClick={() => handleEdit(apartment)}>
+                            Редагувати
+                          </button>
+                          <button className={css.deleteButton} onClick={() => handleDelete(apartment.id)}>
+                            Видалити
+                          </button>
+                        </div>
+                      </div>
+                      {/* #endregion */}
+                    </div>
+                  )}
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
       </div>
+
+      {/* #region modalOverlay*/}
+      {isModalOpen && (
+        <div className={css.modalOverlay}>
+          <ApartmentModal
+            apartment={editingApartment}
+            onClose={() => setIsModalOpen(false)}
+            onSave={handleSave}
+          />
+        </div>
+      )}
+      {/* #endregion */}
+
     </>
   );
 };

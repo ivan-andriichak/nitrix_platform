@@ -5,5 +5,5 @@ export const api = axios.create({
 });
 
 
-export const baseUrl = "http://localhost:5000/";
+export const BASE_URL = 'http://localhost:5000';
 

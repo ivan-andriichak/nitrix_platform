@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { addApartment, AppDispatch, fetchApartments, updateApartment } from '../../store';
 import styles from './ApartmentModal.module.css';
 import { Apartment, FormDataState } from '../../interfaces/apartment.types.ts';
+import { BASE_URL } from '../../services/api.ts';
 
 interface ApartmentModalProps {
   apartment?: Apartment,
@@ -171,7 +172,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
             {formData.photoPreviews.map((photo, index) => (
               <div key={index} className={styles.photoPreviewWrapper}>
                 <img
-                  src={photo}
+                  src={photo.startsWith('blob:') ? photo : `${BASE_URL}${photo}`}
                   alt={`Перегляд: ${index}`}
                   className={styles.photoPreview}
                 />
@@ -201,7 +202,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
           </div>
           {success && (
             <p>
-              Квартира {apartment ? 'updated' : 'added'} successfully!
+              Квартира {apartment ? 'змінена' : 'додана'} успішно!
             </p>
           )}
         </form>
