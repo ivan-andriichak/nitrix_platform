@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {api} from '../../services/api';
-import {Apartment, ApartmentState, ApiApartment} from "../../interfaces/apartment.types.ts";
+import { Apartment, ApartmentState, ApiApartment } from '../../interfaces/apartment.types.ts';
 
 
 const initialState: ApartmentState = {
@@ -16,7 +16,7 @@ const multipartHeaders = {
 
 // 📌 Fetching all apartments
 export const fetchApartments = createAsyncThunk<Apartment[], void>(
-  'apartments/fetchAllApartments', // уточнення назви
+  'apartments/fetchAllApartments',
   async () => {
     const response = await api.get('/apartments');
     return response.data.map((apt: ApiApartment) => ({

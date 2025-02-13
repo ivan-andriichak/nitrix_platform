@@ -13,4 +13,16 @@ export interface IApartmentFilters {
   rooms?: number;
 }
 
+export interface MulterFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  destination: string;
+  filename: string;
+  path: string;
+  buffer: Buffer;
+}
+
 export interface IApartmentResponse extends Pick<IApartment, 'title' | 'description' | 'price' | 'rooms' | 'photos'> {}

@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
 import path from 'path';
@@ -33,17 +33,17 @@ const limiter = rateLimit({
     message: 'Too Many Requests',
   },
 });
-
 app.use(limiter);
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); // Декодує x-www-form-urlencoded
 
 app.use('/apartments', limiter, apartmentRouter);
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use('*', (err: ApiError, req: Request, res: Response) => {
+// eslint-disable-next-line no-unused-vars
+app.use('*', (err: ApiError, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status || 500).json(err.message);
 });
 

@@ -1,25 +1,20 @@
 import { Router } from 'express';
 
-import {
-  createApartment,
-  deleteAllApartments,
-  deleteApartment,
-  getApartment,
-  getApartments,
-  updateApartment,
-} from '../controllers/apartment.controller';
+import { apartmentController } from '../controllers/apartment.controller';
 import { upload } from '../middleware/upload';
 
 const router = Router();
 
-router.get('/', getApartments);
-router.get('/:id', getApartment);
+router.get('/', apartmentController.getAll);
 
-router.post('/', upload.array('photos', 10), createApartment);
+router.get('/:id', apartmentController.getById);
 
-router.put('/:id', upload.array('photos', 10), updateApartment);
+router.post('/', upload.array('photos', 10), apartmentController.create);
 
-router.delete('/deleteAll', deleteAllApartments);
-router.delete('/:id', deleteApartment);
+router.put('/:id', upload.array('photos', 10), apartmentController.update);
+
+router.delete('/deleteAll', apartmentController.deleteAll);
+
+router.delete('/:id', apartmentController.delete);
 
 export const apartmentRouter = router;

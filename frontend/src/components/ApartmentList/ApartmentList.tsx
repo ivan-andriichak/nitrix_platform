@@ -5,7 +5,8 @@ import ApartmentModal from '../ApartmentModal/ApartmentModal';
 import css from './ApartmentList.module.css';
 import clear_icon from '../../images/SVG/clear_icon.svg';
 import { Apartment } from '../../interfaces/apartment.types.ts';
-import { api } from '../../services/api.ts';
+
+const BASE_URL = 'http://localhost:5000';
 
 interface GenresProps {
   onClose?: () => void;
@@ -20,6 +21,8 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   const [editingApartment, setEditingApartment] = useState<Apartment | undefined>(undefined);
   const [selectedPhoto, setSelectedPhoto] = useState<{ photo: string; apartmentId: string } | null>(null);
   const [photoIndex, setPhotoIndex] = useState<number | null>(null);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+
 
   useEffect(() => {
     dispatch(fetchApartments());
@@ -66,6 +69,11 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   const handlePhotoClick = (photo: string, apartmentId: string, index: number) => {
     setSelectedPhoto({ photo, apartmentId });
     setPhotoIndex(index);
+    setIsPhotoModalOpen(true);
+  };
+
+  const handleClosePhotoModal = () => {
+    setIsPhotoModalOpen(false);  // Закриваємо фото модалку
   };
 
   const handleNextPhoto = () => {
@@ -112,13 +120,21 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                   <h3 className={css.apartmentTitle}>{apartment.title}</h3>
                 </div>
 
+                <div className={css.buttonContainer}  style={{ display: isPhotoModalOpen ? 'none' : 'block' }}>
+                  <button className={css.editButton} onClick={() => handleEdit(apartment)}>
+                    Редагувати
+                  </button>
+                  <button className={css.deleteButton} onClick={() => handleDelete(apartment.id)}>
+                    Видалити
+                  </button>
+                </div>
                 {/* #region apartmentPhotos */}
                 {apartment.photos && apartment.photos.length > 0 && (
                   <div className={css.apartmentPhotos}>
                     {apartment.photos.map((photo: string, index: number) => (
                       <img
                         key={photo}
-                        src={`${api}${photo}`}
+                        src={`${BASE_URL}${photo}`}
                         alt={`photo: ${apartment.title}`}
                         className={css.apartmentImage}
                         onClick={() => handlePhotoClick(photo, apartment.id, index)}
@@ -126,10 +142,10 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                     ))}
                     {/* #endregion */}
 
-                    {selectedPhoto?.apartmentId === apartment.id && (
-                      <div className={css.photoModalContainer} onClick={() => setSelectedPhoto(null)}>
+                    {selectedPhoto?.apartmentId === apartment.id && isPhotoModalOpen && (
+                      <div className={css.photoModalContainer} onClick={handleClosePhotoModal}>
 
-                    {/* #region photoModal */}
+                        {/* #region photoModal */}
                         <div className={css.photoModal} onClick={(e) => e.stopPropagation()}>
                           <button className={css.photoModalPrev}
                                   onClick={handlePrevPhoto}
@@ -137,12 +153,17 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                                     fontSize: '2rem',
                                     margin: '5px',
                                     opacity: photoIndex === 0 ? 0.5 : 1,
-                                    cursor: photoIndex === 0 ? 'not-allowed' : 'pointer'
+                                    cursor: photoIndex === 0 ? 'not-allowed' : 'pointer',
                                   }}
                                   disabled={photoIndex === 0}>
                             ❮
                           </button>
-                          <img src={`${api}${selectedPhoto.photo}`} alt="Enlarged" className={css.enlargedPhoto}/>
+
+                          {selectedPhoto && selectedPhoto.photo && (
+                            <img src={`${BASE_URL}${selectedPhoto.photo}`} alt="Enlarged"
+                                 className={css.enlargedPhoto} />
+                          )}
+
                           <button
                             className={css.photoModalNext}
                             onClick={handleNextPhoto}
@@ -150,7 +171,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                               fontSize: '2rem',
                               margin: '5px',
                               opacity: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 0.5 : 1,
-                              cursor: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 'not-allowed' : 'pointer'
+                              cursor: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 'not-allowed' : 'pointer',
                             }}
                             disabled={photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1)}
                           >

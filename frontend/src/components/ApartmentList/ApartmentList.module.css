@@ -56,15 +56,21 @@
 }
 
 .apartmentInfo {
+    max-width: 20rem;
+    max-height: 35rem;
     margin: 1rem;
     padding: 0.5rem;
     border-radius: 5px;
     background-color: rgb(217, 214, 208);
     color: #353434;
+    text-align: center;
 }
 
 .apartmentInfoText {
-text-align: center;
+    text-align: center;
+    border: 3px solid rgb(195, 192, 187);
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .apartmentTitle {
@@ -74,6 +80,7 @@ text-align: center;
 }
 
 .apartmentDescription {
+    padding: 5px;
     font-size: 1rem;
 }
 
@@ -117,7 +124,7 @@ text-align: center;
 }
 
 .buttonContainer {
-margin-top: 1rem;
+    margin-top: 1rem;
 }
 
 .buttonContainer button {
