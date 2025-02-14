@@ -42,21 +42,6 @@
     z-index: 999;
 }
 
-.filters {
-    transition: background-color 0.3s;
-    position: sticky;
-    top: 40px;
-    z-index: 1000;
-}
-
-.filters input {
-    padding: 10px;
-    margin: 3px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
 .apartmentListItem {
     background-color: rgba(228, 230, 231, 0.9);
     padding: 15px;

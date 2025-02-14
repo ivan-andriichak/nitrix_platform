@@ -7,6 +7,7 @@ import css from './ApartmentList.module.css';
 import clear_icon from '../../images/SVG/clear_icon.svg';
 import { Apartment } from '../../interfaces/apartment.types.ts';
 import { BASE_URL } from '../../services/api.ts';
+import { Filters } from '../Filters';
 
 
 interface GenresProps {
@@ -24,17 +25,9 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   const [photoIndex, setPhotoIndex] = useState<number | null>(null);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
 
-  const [priceMin, setPriceMin] = useState('');
-  const [priceMax, setPriceMax] = useState('');
-  const [rooms, setRooms] = useState('');
-
   useEffect(() => {
     dispatch(fetchApartments({}));
   }, [dispatch]);
-
-  const applyFilters = () => {
-    dispatch(fetchApartments({ priceMin, priceMax, rooms }));
-  };
 
   if (loading) return <p className={css.loadingMessage}>Loading...</p>;
   if (error) return <p className={css.errorMessage}>Error: {error}</p>;
@@ -62,6 +55,14 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
     }
   };
 
+  const applyFilters = (filters: { priceMin?: string; priceMax?: string; rooms?: string }) => {
+    dispatch(fetchApartments(filters));
+  };
+
+  const resetFilters = () => {
+    dispatch(fetchApartments({}));
+  };
+
   const handleSave = async (apartment: any) => {
     if (apartment.id) {
       await dispatch(updateApartment(apartment));
@@ -69,13 +70,6 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
       await dispatch(addApartment(apartment));
     }
     setIsModalOpen(false);
-  };
-
-  const resetFilters = () => {
-    setPriceMin('');
-    setPriceMax('');
-    setRooms('');
-    dispatch(fetchApartments({}));
   };
 
   const handlePhotoClick = (photo: string, apartmentId: string, index: number) => {
@@ -121,46 +115,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
           Додати квартиру
         </button>
 
-        <div className={css.filters}>
-          <input placeholder="Мін. ціна" value={priceMin} onChange={(e) => setPriceMin(e.target.value)} />
-          <input placeholder="Макс. ціна" value={priceMax} onChange={(e) => setPriceMax(e.target.value)} />
-          <input
-            type="number"
-            placeholder="Кількість кімнат"
-            value={rooms}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              if (!isNaN(value) && value > 0 && value <= 3) {
-                setRooms(e.target.value);
-              }
-            }}
-          />
-          <button style={{
-            margin: '5px',
-            padding: '10px 20px',
-            border: 'none',
-            borderRadius: '4px',
-            backgroundColor: '#4684c5',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '1rem',
-            transition: 'background-color 0.3s',
-          }} onClick={applyFilters}>Застосувати
-          </button>
-
-          <button style={{
-            margin: '5px',
-            padding: '10px 20px',
-            border: 'none',
-            borderRadius: '4px',
-            backgroundColor: '#4684c5',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '1rem',
-            transition: 'background-color 0.3s',
-          }} onClick={resetFilters}>Очистити
-          </button>
-        </div>
+        <Filters onFilterChange={applyFilters} onResetFilters={resetFilters} />
 
         <button className={css.closeButton} onClick={onClose}>
           <img src={clear_icon} alt="clear_icon" />
