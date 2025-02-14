@@ -211,4 +211,4 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
   );
 };
 
-export default ApartmentModal;
+export  {ApartmentModal};

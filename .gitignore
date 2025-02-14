@@ -7,3 +7,9 @@ dist
 /.husky/
 nitrix_platform.iml
 
+# TypeScript build info
+./frontend/tsconfig.node.tsbuildinfo
+./frontend/tsconfig.tsbuildinfo
+./frontend/vite.config.js
+
+

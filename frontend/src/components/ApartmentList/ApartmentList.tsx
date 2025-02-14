@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addApartment, AppDispatch, deleteApartment, fetchApartments, RootState, updateApartment } from '../../store';
 
-import ApartmentModal from '../ApartmentModal/ApartmentModal';
+import {ApartmentModal} from '../ApartmentModal';
 import {PhotoModal} from '../PhotoModal';
 
 import css from './ApartmentList.module.css';
