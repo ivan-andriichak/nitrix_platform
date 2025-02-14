@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addApartment, AppDispatch, deleteApartment, fetchApartments, RootState, updateApartment } from '../../store';
 
 import ApartmentModal from '../ApartmentModal/ApartmentModal';
+import {PhotoModal} from '../PhotoModal';
+
 import css from './ApartmentList.module.css';
 import clear_icon from '../../images/SVG/clear_icon.svg';
 import { Apartment } from '../../interfaces/apartment.types.ts';
@@ -149,62 +151,18 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                   {/* #endregion */}
 
                   {selectedPhoto?.apartmentId === apartment.id && isPhotoModalOpen && (
-                    <div className={css.photoModalContainer} onClick={handleClosePhotoModal}>
-
-                      {/* #region photoModal */}
-                      <div className={css.photoModal} onClick={(e) => e.stopPropagation()}>
-                        <button className={css.photoModalPrev}
-                                onClick={handlePrevPhoto}
-                                style={{
-                                  fontSize: '2rem',
-                                  margin: '5px',
-                                  opacity: photoIndex === 0 ? 0.5 : 1,
-                                  cursor: photoIndex === 0 ? 'not-allowed' : 'pointer',
-                                }}
-                                disabled={photoIndex === 0}>
-                          ❮
-                        </button>
-
-                        {selectedPhoto && selectedPhoto.photo && (
-                          <img src={`${BASE_URL}${selectedPhoto.photo}`} alt="Enlarged"
-                               className={css.enlargedPhoto} />
-                        )}
-
-                        <button
-                          className={css.photoModalNext}
-                          onClick={handleNextPhoto}
-                          style={{
-                            fontSize: '2rem',
-                            margin: '5px',
-                            opacity: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 0.5 : 1,
-                            cursor: photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1) ? 'not-allowed' : 'pointer',
-                          }}
-                          disabled={photoIndex === ((apartments.find((apartment) => apartment.id === selectedPhoto?.apartmentId)?.photos?.length ?? 0) - 1)}
-                        >
-                          ❯
-                        </button>
-                      </div>
-                      {/* #region apartmentInfo*/}
-                      <div className={css.apartmentInfo}>
-                        <div className={css.apartmentInfoText}>
-                          <h3 className={css.apartmentTitle}>{apartment.title}</h3>
-                          <p className={css.apartmentDescription}>{apartment.description}</p>
-                          <p className={css.apartmentDescription}>Ціна: ${apartment.price}</p>
-                          <p className={css.apartmentDescription}>Кімнати : {apartment.rooms}</p>
-                        </div>
-
-                        <div className={css.buttonContainer}>
-                          <button className={css.editButton} onClick={() => handleEdit(apartment)}>
-                            Редагувати
-                          </button>
-                          <button className={css.deleteButton} onClick={() => handleDelete(apartment.id)}>
-                            Видалити
-                          </button>
-                        </div>
-                      </div>
-                      {/* #endregion */}
-                    </div>
+                    <PhotoModal
+                      apartment={apartment}
+                      selectedPhoto={selectedPhoto}
+                      photoIndex={photoIndex}
+                      onClose={handleClosePhotoModal}
+                      onPrevPhoto={handlePrevPhoto}
+                      onNextPhoto={handleNextPhoto}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
                   )}
+
                 </div>
               )}
             </li>

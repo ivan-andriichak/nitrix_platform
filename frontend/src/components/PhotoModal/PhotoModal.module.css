@@ -1,0 +1,84 @@
+.photoModalContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.photoModal {
+    width: 35rem;
+    height: 25rem;
+    background-color: rgb(217, 214, 208);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.enlargedPhoto {
+    width: 90%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.apartmentInfo {
+    max-width: 20rem;
+    max-height: 35rem;
+    margin: 1rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background-color: rgb(217, 214, 208);
+    color: #353434;
+    text-align: center;
+}
+
+.apartmentInfoText {
+    text-align: center;
+    border: 3px solid rgb(195, 192, 187);
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.apartmentTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #353434;
+}
+
+.apartmentDescription {
+    padding: 5px;
+    font-size: 1rem;
+}
+
+.buttonContainer button {
+    margin: 5px;
+}
+
+.editButton {
+    background-color: #4684c5;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.editButton:hover {
+    background-color: #0056b3;
+}
+
+.deleteButton {
+    background-color: #89a885;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.deleteButton:hover {
+    background-color: #c82333;
+}
