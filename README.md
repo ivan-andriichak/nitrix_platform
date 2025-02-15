@@ -1,8 +1,15 @@
-```markdown
+
 # Apartment Management Platform
+<p>
+<hr/>
+<img width="1500" src="./frontend/src/images/PNG/apartment_background.jpeg" alt="apartment_logo"> 
+Project is designed to manage an apartment rental platform. It allows adding, editing, deleting, and viewing apartments, as well as filtering them by price and number of rooms. The stack includes **Node.js**, **Express**, **MongoDB** for the backend, and **React** with **Redux Toolkit** for the frontend.
 
-This project is designed to manage an apartment rental platform. It allows adding, editing, deleting, and viewing apartments, as well as filtering them by price and number of rooms. The stack includes **Node.js**, **Express**, **MongoDB** for the backend, and **React** with **Redux Toolkit** for the frontend.
+<a href="https://www.npmjs.com/~nestjs" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjs" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjs" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
 
+<p>DescriptionБ</p>
 ## Features
 
 - **Add Apartment**: A form to submit apartment details (title, description, price, number of rooms, photos).
@@ -14,13 +21,13 @@ This project is designed to manage an apartment rental platform. It allows addin
 ## Technologies
 
 - **Frontend**:
-  - React (with TypeScript)
-  - Redux Toolkit
-  - Axios for API calls
+    - React (with TypeScript)
+    - Redux Toolkit
+    - Axios for API calls
 - **Backend**:
-  - Node.js
-  - Express.js
-  - MongoDB for data storage
+    - Node.js
+    - Express.js
+    - MongoDB for data storage
 
 ## Setup Instructions
 
@@ -90,10 +97,7 @@ This project is designed to manage an apartment rental platform. It allows addin
 
 Clone the repository to your local machine:
 
-```bash
-git clone https://github.com/ivan-andriichak/nitrix_platform.git
-cd nitrix_platform
-```
+git clone "https://github.com/ivan-andriichak/nitrix_platform.git \"
 
 ### 2. Set up the Environment
 
@@ -119,22 +123,20 @@ After running the Docker containers, the backend API should be available on http
 
 Here are some of the available scripts for development:
 
+### Installation
+
 ### Backend:
-
 ```bash
-cd backend
-
+$ cd backend
 npm install
-npm run start:dev
+$ npm run start:dev
 ```
 
-- \[`npm run dev`\]: Starts the backend server in development mode (with nodemon and TypeScript).
-- \[`npm run lint`\]: Runs ESLint for code linting.
 ### Frontend:
 ```bash
-cd frontend
-npm run build
-npm run start
+$ cd frontend
+npm install
+npm run build 
 ```
 
 - \[`npm start`\]: Starts the React development server.
@@ -144,10 +146,6 @@ npm run start
 
 Make sure to test your application locally after setting up both the frontend and backend. Use Postman or any API client to test the API endpoints.
 
-```
-
-- \[`npm run dev`\]: Starts the backend server in development mode (with nodemon and TypeScript).
-- \[`npm run lint`\]: Runs ESLint for code linting.
 ### Frontend:
 ```bash
 cd frontend
@@ -161,3 +159,4 @@ npm start
 ## Testing
 
 Make sure to test your application locally after setting up both the frontend and backend. Use Postman or any API client to test the API endpoints.
+
