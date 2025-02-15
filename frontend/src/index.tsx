@@ -3,7 +3,7 @@ import './index.css'
 import {RouterProvider} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./store";
-import {router} from "./router.tsx";
+import { router } from './router';
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>

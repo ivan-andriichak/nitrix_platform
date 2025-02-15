@@ -1,4 +1,4 @@
-import {Header} from "../components";
+import Header from '../components/Header/Header';
 
 const HeaderPage = () => {
   return (
@@ -8,4 +8,4 @@ const HeaderPage = () => {
   );
 };
 
-export {HeaderPage};
+export default HeaderPage;

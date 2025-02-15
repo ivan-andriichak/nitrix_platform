@@ -1,8 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {NavLink} from 'react-router-dom';
 
-import {UserInfo} from '../UserInfo';
-import {ApartmentList} from '../ApartmentList';
 
 import css from './Header.module.css';
 
@@ -11,6 +9,8 @@ import clear_icon from '../../images/SVG/clear_icon.svg';
 import search_icon from '../../images/SVG/search_icon.svg';
 import user_icon from '../../images/PNG/user_icon.png';
 import apartment_logo from '../../images/PNG/apartment_logo.png';
+import ApartmentList from '../ApartmentList/ApartmentList';
+import UserInfo from '../UserInfo/UserInfo';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false); // Відкриття/закриття меню
@@ -129,4 +129,4 @@ const Header = () => {
   );
 };
 
-export { Header };
+export default Header ;

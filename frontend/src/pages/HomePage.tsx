@@ -1,4 +1,4 @@
-import { Home } from '../components';
+import Home from '../components/Home/Home';
 
 const HomePage = () => {
   return (
@@ -8,4 +8,4 @@ const HomePage = () => {
   );
 };
 
-export { HomePage };
+export default HomePage ;

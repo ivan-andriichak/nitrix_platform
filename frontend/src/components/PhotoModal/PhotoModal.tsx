@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import css from './PhotoModal.module.css';
-import { Apartment } from '../../interfaces/apartment.types.ts';
-import { BASE_URL } from '../../services/api.ts';
+import { Apartment } from '../../interfaces/apartment.types';
+import { BASE_URL } from '../../services/api';
 
 interface PhotoModalContainerProps {
   apartment: Apartment;

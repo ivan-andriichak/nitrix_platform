@@ -45,4 +45,4 @@ const UserInfo: FC<UserInfoProps> = ({onClose}) => {
     );
 };
 
-export {UserInfo};
+export default UserInfo;

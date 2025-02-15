@@ -1,0 +1,14 @@
+{
+  "name": "nitrix_platform",
+  "version": "1.0.0",
+  "scripts": {
+    "start:frontend": "npm --prefix frontend run dev",
+    "start:backend": "npm --prefix backend run start",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+    "build": "npm --prefix frontend run build && npm --prefix backend run build",
+    "test": "echo \"Write tests!\" && exit 0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

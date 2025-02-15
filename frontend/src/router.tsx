@@ -1,6 +1,7 @@
 import {createBrowserRouter, RouteObject} from 'react-router-dom';
 import {MainLayout} from './layouts';
-import {ErrorPage, HomePage} from './pages';
+import HomePage from './pages/HomePage';
+import { ErrorPage } from './pages';
 
 const router: RouteObject[] = [
   {

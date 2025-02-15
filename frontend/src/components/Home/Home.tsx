@@ -1,5 +1,5 @@
 import css from './Home.module.css';
-import {HeaderPage} from "../../pages";
+import HeaderPage from '../../pages/HeaderPage';
 
 const Home = () => {
   return (
@@ -9,5 +9,5 @@ const Home = () => {
   );
 };
 
-export {Home};
+export default Home;
 

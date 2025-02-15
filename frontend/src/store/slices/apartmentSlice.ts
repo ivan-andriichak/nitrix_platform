@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {api} from '../../services/api';
-import { Apartment, ApartmentState, ApiApartment } from '../../interfaces/apartment.types.ts';
+import { Apartment, ApartmentState, ApiApartment } from '../../interfaces/apartment.types';
 
 
 const initialState: ApartmentState = {

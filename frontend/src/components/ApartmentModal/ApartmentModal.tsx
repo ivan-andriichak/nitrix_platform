@@ -2,8 +2,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addApartment, AppDispatch, fetchApartments, updateApartment } from '../../store';
 import css from './ApartmentModal.module.css';
-import { Apartment, FormDataState } from '../../interfaces/apartment.types.ts';
-import { BASE_URL } from '../../services/api.ts';
+import { Apartment, FormDataState } from '../../interfaces/apartment.types';
+import { BASE_URL } from '../../services/api';
 
 interface ApartmentModalProps {
   apartment?: Apartment,
@@ -11,7 +11,7 @@ interface ApartmentModalProps {
   onSave?: (apartment: Apartment) => Promise<void>
 }
 
-const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
+const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [photosToRemove, setPhotosToRemove] = useState<string[]>([]);
@@ -49,8 +49,8 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
         photos: [...prev.photos, ...fileArray],
         photoPreviews: [
           ...prev.photoPreviews,
-          ...fileArray.map(file => URL.createObjectURL(file))
-        ]
+          ...fileArray.map(file => URL.createObjectURL(file)),
+        ],
       }));
     }
   };
@@ -122,7 +122,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
   return (
     <div className={css.modalOverlay} onClick={onClose}>
       <div className={css.modal} onClick={(e) => e.stopPropagation()}>
-        <h2 style={{color:'darkgreen'}}>{apartment ? 'Редагувати квартиру' : 'Додати квартиру'}</h2>
+        <h2 style={{ color: 'darkgreen' }}>{apartment ? 'Редагувати квартиру' : 'Додати квартиру'}</h2>
         <form onSubmit={handleSubmit}>
           <input
             className={css.input}
@@ -165,7 +165,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
             ))}
           </select>
 
-          <label style={{color:'darkgreen'}} htmlFor="photos">Завантажити фото:</label>
+          <label style={{ color: 'darkgreen' }} htmlFor="photos">Завантажити фото:</label>
           <input type="file" name="photos" id="photos" multiple onChange={handlePhotoChange} />
 
           <div className={css.photoPreviewsContainer}>
@@ -211,4 +211,4 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose}) => {
   );
 };
 
-export  {ApartmentModal};
+export default ApartmentModal;

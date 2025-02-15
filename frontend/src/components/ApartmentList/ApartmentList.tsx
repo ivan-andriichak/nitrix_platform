@@ -2,14 +2,14 @@ import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addApartment, AppDispatch, deleteApartment, fetchApartments, RootState, updateApartment } from '../../store';
 
-import {ApartmentModal} from '../ApartmentModal';
 import {PhotoModal} from '../PhotoModal';
 
 import css from './ApartmentList.module.css';
 import clear_icon from '../../images/SVG/clear_icon.svg';
-import { Apartment } from '../../interfaces/apartment.types.ts';
-import { BASE_URL } from '../../services/api.ts';
 import { Filters } from '../Filters';
+import { Apartment } from '../../interfaces/apartment.types';
+import { BASE_URL } from '../../services/api';
+import ApartmentModal from '../ApartmentModal/ApartmentModal';
 
 
 interface GenresProps {
@@ -186,4 +186,4 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   );
 };
 
-export { ApartmentList };
+export default ApartmentList ;
