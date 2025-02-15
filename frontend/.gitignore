@@ -27,5 +27,6 @@ dist-ssr
 tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
 vite.config.js
+package-lock.json
 
 
