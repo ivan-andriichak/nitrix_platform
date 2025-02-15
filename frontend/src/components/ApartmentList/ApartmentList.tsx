@@ -1,8 +1,16 @@
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addApartment, AppDispatch, deleteApartment, fetchApartments, RootState, updateApartment } from '../../store';
 
-import {PhotoModal} from '../PhotoModal';
+import {
+  addApartment,
+  AppDispatch,
+  deleteApartment,
+  fetchApartments,
+  RootState,
+  updateApartment,
+} from '../../store';
+
+import { PhotoModal } from '../PhotoModal';
 
 import css from './ApartmentList.module.css';
 import clear_icon from '../../images/SVG/clear_icon.svg';
@@ -11,7 +19,6 @@ import { Apartment } from '../../interfaces/apartment.types';
 import { BASE_URL } from '../../services/api';
 import ApartmentModal from '../ApartmentModal/ApartmentModal';
 
-
 interface GenresProps {
   onClose?: () => void;
 }
@@ -19,11 +26,18 @@ interface GenresProps {
 const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { apartments, loading, error } = useSelector((state: RootState) => state.apartment);
+  const { apartments, loading, error } = useSelector(
+    (state: RootState) => state.apartment,
+  );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingApartment, setEditingApartment] = useState<Apartment | undefined>(undefined);
-  const [selectedPhoto, setSelectedPhoto] = useState<{ photo: string; apartmentId: string } | null>(null);
+  const [editingApartment, setEditingApartment] = useState<
+    Apartment | undefined
+  >(undefined);
+  const [selectedPhoto, setSelectedPhoto] = useState<{
+    photo: string;
+    apartmentId: string;
+  } | null>(null);
   const [photoIndex, setPhotoIndex] = useState<number | null>(null);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
 
@@ -45,7 +59,9 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   };
 
   const handleDelete = async (id: string) => {
-    const isConfirmed = window.confirm('Are you sure you want to delete this apartment?');
+    const isConfirmed = window.confirm(
+      'Are you sure you want to delete this apartment?',
+    );
     if (isConfirmed) {
       try {
         await dispatch(deleteApartment(id));
@@ -57,7 +73,11 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
     }
   };
 
-  const applyFilters = (filters: { priceMin?: string; priceMax?: string; rooms?: string }) => {
+  const applyFilters = (filters: {
+    priceMin?: string;
+    priceMax?: string;
+    rooms?: string;
+  }) => {
     dispatch(fetchApartments(filters));
   };
 
@@ -74,7 +94,11 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
     setIsModalOpen(false);
   };
 
-  const handlePhotoClick = (photo: string, apartmentId: string, index: number) => {
+  const handlePhotoClick = (
+    photo: string,
+    apartmentId: string,
+    index: number,
+  ) => {
     setSelectedPhoto({ photo, apartmentId });
     setPhotoIndex(index);
     setIsPhotoModalOpen(true);
@@ -86,11 +110,16 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
 
   const handleNextPhoto = () => {
     if (selectedPhoto?.apartmentId) {
-      const apartment = apartments.find((a) => a.id === selectedPhoto.apartmentId);
+      const apartment = apartments.find(
+        a => a.id === selectedPhoto.apartmentId,
+      );
       if (apartment && apartment.photos && photoIndex !== null) {
         const nextIndex = photoIndex + 1;
         if (nextIndex < apartment.photos.length) {
-          setSelectedPhoto({ photo: apartment.photos[nextIndex], apartmentId: selectedPhoto.apartmentId });
+          setSelectedPhoto({
+            photo: apartment.photos[nextIndex],
+            apartmentId: selectedPhoto.apartmentId,
+          });
           setPhotoIndex(nextIndex);
         }
       }
@@ -99,17 +128,22 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
 
   const handlePrevPhoto = () => {
     if (selectedPhoto?.apartmentId) {
-      const apartment = apartments.find((a) => a.id === selectedPhoto.apartmentId);
+      const apartment = apartments.find(
+        a => a.id === selectedPhoto.apartmentId,
+      );
       if (apartment && apartment.photos && photoIndex !== null) {
         const prevIndex = photoIndex - 1;
         if (prevIndex >= 0) {
-          setSelectedPhoto({ photo: apartment.photos[prevIndex], apartmentId: selectedPhoto.apartmentId });
+          setSelectedPhoto({
+            photo: apartment.photos[prevIndex],
+            apartmentId: selectedPhoto.apartmentId,
+          });
           setPhotoIndex(prevIndex);
         }
       }
     }
   };
-// _________________________________________________________________________
+  // _________________________________________________________________________
   return (
     <>
       <div className={css.apartmentListContainer}>
@@ -124,45 +158,55 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
         </button>
 
         <ul>
-          {apartments.map((apartment) => (
+          {apartments.map(apartment => (
             <li key={apartment.id} className={css.apartmentListItem}>
               <h3 className={css.apartmentTitle}>{apartment.title}</h3>
 
-              <div className={css.buttonContainer} style={{ display: isPhotoModalOpen ? 'none' : 'block' }}>
-                <button className={css.editButton} onClick={() => handleEdit(apartment)}>
+              <div
+                className={css.buttonContainer}
+                style={{ display: isPhotoModalOpen ? 'none' : 'block' }}>
+                <button
+                  className={css.editButton}
+                  onClick={() => handleEdit(apartment)}>
                   Редагувати
                 </button>
-                <button className={css.deleteButton} onClick={() => handleDelete(apartment.id)}>
+                <button
+                  className={css.deleteButton}
+                  onClick={() => handleDelete(apartment.id)}>
                   Видалити
                 </button>
               </div>
               {/* #region apartmentPhotos */}
               {apartment.photos && apartment.photos.length > 0 && (
                 <div className={css.apartmentPhotos}>
-                  {apartment.photos.slice(0, 10).map((photo: string, index: number)  => (
-                    <img
-                      key={photo}
-                      src={`${BASE_URL}${photo}`}
-                      alt={`photo: ${apartment.title}`}
-                      className={`${css.apartmentImage} ${selectedPhoto?.photo === photo ? css.activePhoto : ''}`}
-                      onClick={() => handlePhotoClick(photo, apartment.id, index)}
-                    />
-                  ))}
+                  {apartment.photos
+                    .slice(0, 10)
+                    .map((photo: string, index: number) => (
+                      <img
+                        key={photo}
+                        src={`${BASE_URL}${photo}`}
+                        alt={`photo: ${apartment.title}`}
+                        className={`${css.apartmentImage} ${selectedPhoto?.photo === photo ? css.activePhoto : ''}`}
+                        onClick={() =>
+                          handlePhotoClick(photo, apartment.id, index)
+                        }
+                      />
+                    ))}
                   {/* #endregion */}
 
-                  {selectedPhoto?.apartmentId === apartment.id && isPhotoModalOpen && (
-                    <PhotoModal
-                      apartment={apartment}
-                      selectedPhoto={selectedPhoto}
-                      photoIndex={photoIndex}
-                      onClose={handleClosePhotoModal}
-                      onPrevPhoto={handlePrevPhoto}
-                      onNextPhoto={handleNextPhoto}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                    />
-                  )}
-
+                  {selectedPhoto?.apartmentId === apartment.id &&
+                    isPhotoModalOpen && (
+                      <PhotoModal
+                        apartment={apartment}
+                        selectedPhoto={selectedPhoto}
+                        photoIndex={photoIndex}
+                        onClose={handleClosePhotoModal}
+                        onPrevPhoto={handlePrevPhoto}
+                        onNextPhoto={handleNextPhoto}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    )}
                 </div>
               )}
             </li>
@@ -181,9 +225,8 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
         </div>
       )}
       {/* #endregion */}
-
     </>
   );
 };
 
-export default ApartmentList ;
+export default ApartmentList;

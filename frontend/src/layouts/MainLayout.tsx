@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom';
 const MainLayout = () => {
   return (
     <div>
-      <Outlet/>
+      <Outlet />
     </div>
   );
 };
 
-export {MainLayout};
+export { MainLayout };

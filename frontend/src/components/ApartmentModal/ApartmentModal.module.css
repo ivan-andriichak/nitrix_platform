@@ -1,102 +1,101 @@
 .modalOverlay {
-    color: black;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    width: 400px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 400px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    margin-bottom: 5px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-bottom: 5px;
 }
 
-.buttonsContainer, .buttonContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin: 1rem;
+.buttonsContainer,
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 1rem;
 }
 
 .cancelButton {
-    background: #ccc;
-    color: black;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  background: #ccc;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .cancelButton:hover {
-    background: #b0b0b0;
+  background: #b0b0b0;
 }
 
 .saveButton {
-    background: #007bff;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  background: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .saveButton:hover {
-    background: #0056b3;
+  background: #0056b3;
 }
 
 .photoPreviewsContainer {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-    max-width: 100%;
-    overflow: auto;
-    padding: 8px;
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  max-width: 100%;
+  overflow: auto;
+  padding: 8px;
 }
 
-
 .photoPreviewWrapper {
-    position: relative;
+  position: relative;
 }
 
 .photoPreview {
-    width: 10rem;
-    object-fit: cover;
-    border-radius: 5px;
+  width: 10rem;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .deletePhotoButton {
-    position: absolute;
-    right: 2px;
-    background-color: rgba(255, 0, 0, 0.8);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    padding: 2px 6px;
-    cursor: pointer;
-    font-size: 12px;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
+  position: absolute;
+  right: 2px;
+  background-color: rgba(255, 0, 0, 0.8);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
 }
 
 .deletePhotoButton:hover {
-    opacity: 1;
+  opacity: 1;
 }
-

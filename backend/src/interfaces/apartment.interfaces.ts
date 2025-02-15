@@ -25,4 +25,8 @@ export interface MulterFile {
   buffer: Buffer;
 }
 
-export interface IApartmentResponse extends Pick<IApartment, 'title' | 'description' | 'price' | 'rooms' | 'photos'> {}
+export interface IApartmentResponse
+  extends Pick<
+    IApartment,
+    'title' | 'description' | 'price' | 'rooms' | 'photos'
+  > {}

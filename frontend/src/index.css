@@ -19,7 +19,10 @@ body {
 }
 
 /* Скидання стандартних стилів для кнопок */
-button, input[type="button"], input[type="submit"], input[type="reset"] {
+button,
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -32,6 +35,7 @@ a {
 }
 
 /* Скидання списку стилів для списків */
-ul, ol {
+ul,
+ol {
   list-style: none;
 }

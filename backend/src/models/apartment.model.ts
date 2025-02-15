@@ -9,4 +9,7 @@ const apartmentSchema = new mongoose.Schema({
   rooms: { type: Number, required: true, enum: [1, 2, 3] },
   photos: { type: [String], default: [] },
 });
-export const Apartment = mongoose.model<IApartment>('Apartment', apartmentSchema);
+export const Apartment = mongoose.model<IApartment>(
+  'Apartment',
+  apartmentSchema,
+);

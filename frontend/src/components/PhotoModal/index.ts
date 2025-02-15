@@ -1,2 +1,2 @@
-export * from './PhotoModal'
-export * from './PhotoModal.module.css'
+export * from './PhotoModal';
+export * from './PhotoModal.module.css';

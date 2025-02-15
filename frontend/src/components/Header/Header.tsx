@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {NavLink} from 'react-router-dom';
-
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import css from './Header.module.css';
 
@@ -22,24 +21,27 @@ const Header = () => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleMenuToggle = useCallback(() => {
-    setMenuOpen((prev) => !prev);
+    setMenuOpen(prev => !prev);
   }, []);
 
   const handleLogoClick = () => {
-    setApartmentsMenuOpen((prev) => !prev);
-    setAnimationActive((prev) => !prev);
+    setApartmentsMenuOpen(prev => !prev);
+    setAnimationActive(prev => !prev);
   };
 
-  const handleSearchInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
-  }, []);
+  const handleSearchInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchText(e.target.value);
+    },
+    [],
+  );
 
   const handleClearSearchText = useCallback(() => {
     setSearchText('');
   }, []);
 
   const toggleUserInfo = () => {
-    setIsUserInfoOpen((prev) => !prev);
+    setIsUserInfoOpen(prev => !prev);
   };
 
   // Закриття меню при кліку поза ним
@@ -64,7 +66,6 @@ const Header = () => {
   return (
     <div className={css.header_container}>
       <div className={css.header}>
-
         <div className={css.menu_block} ref={menuRef}>
           <img
             className={`${css.menu_icon} ${menuOpen ? css.active : ''}`}
@@ -76,10 +77,18 @@ const Header = () => {
 
           {menuOpen && (
             <ul className={css.dropdown_menu}>
-              <li><NavLink to="/apartments">Квартири</NavLink></li>
-              <li><NavLink to="/houses">Будинки</NavLink></li>
-              <li><NavLink to="/contacts">Контакти</NavLink></li>
-              <li><NavLink to="/about">Про нас</NavLink></li>
+              <li>
+                <NavLink to="/apartments">Квартири</NavLink>
+              </li>
+              <li>
+                <NavLink to="/houses">Будинки</NavLink>
+              </li>
+              <li>
+                <NavLink to="/contacts">Контакти</NavLink>
+              </li>
+              <li>
+                <NavLink to="/about">Про нас</NavLink>
+              </li>
             </ul>
           )}
         </div>
@@ -114,8 +123,7 @@ const Header = () => {
 
       <button
         className={`${css.apartments_logo_block} ${animationActive ? css.animated : ''}`}
-        onClick={handleLogoClick}
-      >
+        onClick={handleLogoClick}>
         <img
           className={css.menu_icon}
           src={apartment_logo}
@@ -124,9 +132,11 @@ const Header = () => {
         <p>Знайди квартиру мрії</p>
       </button>
 
-      {apartmentsMenuOpen && <ApartmentList onClose={() => setApartmentsMenuOpen(false)} />}
+      {apartmentsMenuOpen && (
+        <ApartmentList onClose={() => setApartmentsMenuOpen(false)} />
+      )}
     </div>
   );
 };
 
-export default Header ;
+export default Header;

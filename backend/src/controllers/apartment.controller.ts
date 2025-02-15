@@ -8,7 +8,11 @@ import { Apartment } from '../models/apartment.model';
 const unlinkAsync = promisify(unlink);
 
 class ApartmentController {
-  public async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async create(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { title, description, price, rooms } = req.body as IApartment;
       const files = req.files as MulterFile[] | MulterFile | undefined;
@@ -16,7 +20,7 @@ class ApartmentController {
       let photos: string[] = [];
       if (files) {
         photos = Array.isArray(files)
-          ? files.map((file) => `/uploads/${file.filename}`)
+          ? files.map(file => `/uploads/${file.filename}`)
           : [`/uploads/${files.filename}`];
       }
 
@@ -25,7 +29,13 @@ class ApartmentController {
         return;
       }
 
-      const newApartment = new Apartment({ title, description, price, rooms, photos });
+      const newApartment = new Apartment({
+        title,
+        description,
+        price,
+        rooms,
+        photos,
+      });
       const savedApartment = await newApartment.save();
 
       res.status(201).json(savedApartment);
@@ -34,9 +44,17 @@ class ApartmentController {
     }
   }
 
-  public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async getAll(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
-      const { priceMin, priceMax, rooms }: { priceMin?: number; priceMax?: number; rooms?: number } = req.query;
+      const {
+        priceMin,
+        priceMax,
+        rooms,
+      }: { priceMin?: number; priceMax?: number; rooms?: number } = req.query;
 
       const filters: any = {};
       if (priceMin || priceMax) {
@@ -55,7 +73,11 @@ class ApartmentController {
     }
   }
 
-  public async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async getById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const apartment = await Apartment.findById(id);
@@ -71,7 +93,11 @@ class ApartmentController {
     }
   }
 
-  public async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async update(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const updates = req.body;
@@ -80,7 +106,7 @@ class ApartmentController {
       let newPhotos: string[] = [];
       if (files) {
         newPhotos = Array.isArray(files)
-          ? files.map((file) => `/uploads/${file.filename}`)
+          ? files.map(file => `/uploads/${file.filename}`)
           : [`/uploads/${files.filename}`];
       }
 
@@ -88,9 +114,14 @@ class ApartmentController {
       if (req.body.photosToRemove) {
         try {
           photosToRemove =
-            typeof req.body.photosToRemove === 'string' ? JSON.parse(req.body.photosToRemove) : req.body.photosToRemove;
+            typeof req.body.photosToRemove === 'string'
+              ? JSON.parse(req.body.photosToRemove)
+              : req.body.photosToRemove;
         } catch (e) {
-          res.status(400).json({ message: 'Invalid photosToRemove format', error: e.message });
+          res.status(400).json({
+            message: 'Invalid photosToRemove format',
+            error: e.message,
+          });
           return;
         }
       }
@@ -113,7 +144,9 @@ class ApartmentController {
 
       // Оновлення фотографій
       Object.assign(apartment, updates);
-      apartment.photos = apartment.photos.filter((photo) => !photosToRemove.includes(photo));
+      apartment.photos = apartment.photos.filter(
+        photo => !photosToRemove.includes(photo),
+      );
       apartment.photos.push(...newPhotos);
 
       const updatedApartment = await apartment.save();
@@ -123,7 +156,11 @@ class ApartmentController {
     }
   }
 
-  public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async delete(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const apartment = await Apartment.findById(id);
@@ -151,7 +188,11 @@ class ApartmentController {
     }
   }
 
-  public async deleteAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async deleteAll(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       await Apartment.deleteMany({});
       res.status(200).json({ message: 'All apartments deleted successfully' });

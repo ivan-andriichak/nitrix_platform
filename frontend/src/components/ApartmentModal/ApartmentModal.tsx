@@ -1,14 +1,19 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addApartment, AppDispatch, fetchApartments, updateApartment } from '../../store';
+import {
+  addApartment,
+  AppDispatch,
+  fetchApartments,
+  updateApartment,
+} from '../../store';
 import css from './ApartmentModal.module.css';
 import { Apartment, FormDataState } from '../../interfaces/apartment.types';
 import { BASE_URL } from '../../services/api';
 
 interface ApartmentModalProps {
-  apartment?: Apartment,
-  onClose: () => void,
-  onSave?: (apartment: Apartment) => Promise<void>
+  apartment?: Apartment;
+  onClose: () => void;
+  onSave?: (apartment: Apartment) => Promise<void>;
 }
 
 const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
@@ -36,7 +41,11 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
     });
   }, [apartment]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -63,7 +72,9 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
       if (!removedPreview.startsWith('blob:')) {
         setPhotosToRemove(prevRemove => [...prevRemove, removedPreview]);
       } else {
-        const existingCount = prev.photoPreviews.filter(url => !url.startsWith('blob:')).length;
+        const existingCount = prev.photoPreviews.filter(
+          url => !url.startsWith('blob:'),
+        ).length;
         if (index >= existingCount) {
           const newFileIndex = index - existingCount;
           const newPhotos = [...prev.photos];
@@ -94,7 +105,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
     formDataToSend.append('price', formData.price.toString());
     formDataToSend.append('rooms', formData.rooms.toString());
 
-    formData.photos.forEach((photo) => {
+    formData.photos.forEach(photo => {
       formDataToSend.append('photos', photo);
     });
 
@@ -102,7 +113,9 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
 
     try {
       if (apartment) {
-        await dispatch(updateApartment({ id: apartment.id, formData: formDataToSend }));
+        await dispatch(
+          updateApartment({ id: apartment.id, formData: formDataToSend }),
+        );
       } else {
         await dispatch(addApartment(formDataToSend));
       }
@@ -121,8 +134,10 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
 
   return (
     <div className={css.modalOverlay} onClick={onClose}>
-      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
-        <h2 style={{ color: 'darkgreen' }}>{apartment ? 'Редагувати квартиру' : 'Додати квартиру'}</h2>
+      <div className={css.modal} onClick={e => e.stopPropagation()}>
+        <h2 style={{ color: 'darkgreen' }}>
+          {apartment ? 'Редагувати квартиру' : 'Додати квартиру'}
+        </h2>
         <form onSubmit={handleSubmit}>
           <input
             className={css.input}
@@ -156,8 +171,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             name="rooms"
             value={formData.rooms}
             onChange={handleChange}
-            required
-          >
+            required>
             {[1, 2, 3].map(num => (
               <option key={num} value={num}>
                 {num} Квартира(ри)
@@ -165,22 +179,31 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             ))}
           </select>
 
-          <label style={{ color: 'darkgreen' }} htmlFor="photos">Завантажити фото:</label>
-          <input type="file" name="photos" id="photos" multiple onChange={handlePhotoChange} />
+          <label style={{ color: 'darkgreen' }} htmlFor="photos">
+            Завантажити фото:
+          </label>
+          <input
+            type="file"
+            name="photos"
+            id="photos"
+            multiple
+            onChange={handlePhotoChange}
+          />
 
           <div className={css.photoPreviewsContainer}>
             {formData.photoPreviews.map((photo, index) => (
               <div key={index} className={css.photoPreviewWrapper}>
                 <img
-                  src={photo.startsWith('blob:') ? photo : `${BASE_URL}${photo}`}
+                  src={
+                    photo.startsWith('blob:') ? photo : `${BASE_URL}${photo}`
+                  }
                   alt={`Перегляд: ${index}`}
                   className={css.photoPreview}
                 />
                 <button
                   type="button"
                   className={css.deletePhotoButton}
-                  onClick={() => handleDeletePreview(index)}
-                >
+                  onClick={() => handleDeletePreview(index)}>
                   Видалити
                 </button>
               </div>
@@ -192,8 +215,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
               type="button"
               onClick={onClose}
               className={css.cancelButton}
-              disabled={success}
-            >
+              disabled={success}>
               Закрити
             </button>
             <button type="submit" className={css.saveButton} disabled={success}>
@@ -201,9 +223,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             </button>
           </div>
           {success && (
-            <p>
-              Квартира {apartment ? 'змінена' : 'додана'} успішно!
-            </p>
+            <p>Квартира {apartment ? 'змінена' : 'додана'} успішно!</p>
           )}
         </form>
       </div>

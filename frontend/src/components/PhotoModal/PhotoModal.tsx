@@ -15,18 +15,18 @@ interface PhotoModalContainerProps {
 }
 
 const PhotoModal: FC<PhotoModalContainerProps> = ({
-                                                    apartment,
-                                                    selectedPhoto,
-                                                    photoIndex,
-                                                    onClose,
-                                                    onPrevPhoto,
-                                                    onNextPhoto,
-                                                    onEdit,
-                                                    onDelete,
-                                                  }) => {
+  apartment,
+  selectedPhoto,
+  photoIndex,
+  onClose,
+  onPrevPhoto,
+  onNextPhoto,
+  onEdit,
+  onDelete,
+}) => {
   return (
     <div className={css.photoModalContainer} onClick={onClose}>
-      <div className={css.photoModal} onClick={(e) => e.stopPropagation()}>
+      <div className={css.photoModal} onClick={e => e.stopPropagation()}>
         <button
           className={css.photoModalPrev}
           onClick={onPrevPhoto}
@@ -36,13 +36,16 @@ const PhotoModal: FC<PhotoModalContainerProps> = ({
             opacity: photoIndex === 0 ? 0.5 : 1,
             cursor: photoIndex === 0 ? 'not-allowed' : 'pointer',
           }}
-          disabled={photoIndex === 0}
-        >
+          disabled={photoIndex === 0}>
           ❮
         </button>
 
         {selectedPhoto && selectedPhoto.photo && (
-          <img src={`${BASE_URL}${selectedPhoto.photo}`} alt="Enlarged" className={css.enlargedPhoto} />
+          <img
+            src={`${BASE_URL}${selectedPhoto.photo}`}
+            alt="Enlarged"
+            className={css.enlargedPhoto}
+          />
         )}
 
         <button
@@ -51,11 +54,14 @@ const PhotoModal: FC<PhotoModalContainerProps> = ({
           style={{
             fontSize: '2rem',
             margin: '5px',
-            opacity: photoIndex === ((apartment.photos?.length ?? 0) - 1) ? 0.5 : 1,
-            cursor: photoIndex === ((apartment.photos?.length ?? 0) - 1) ? 'not-allowed' : 'pointer',
+            opacity:
+              photoIndex === (apartment.photos?.length ?? 0) - 1 ? 0.5 : 1,
+            cursor:
+              photoIndex === (apartment.photos?.length ?? 0) - 1
+                ? 'not-allowed'
+                : 'pointer',
           }}
-          disabled={photoIndex === ((apartment.photos?.length ?? 0) - 1)}
-        >
+          disabled={photoIndex === (apartment.photos?.length ?? 0) - 1}>
           ❯
         </button>
       </div>
@@ -65,14 +71,18 @@ const PhotoModal: FC<PhotoModalContainerProps> = ({
           <h3 className={css.apartmentTitle}>{apartment.title}</h3>
           <p className={css.apartmentDescription}>{apartment.description}</p>
           <p className={css.apartmentDescription}>Ціна: ${apartment.price}</p>
-          <p className={css.apartmentDescription}>Кімнати : {apartment.rooms}</p>
+          <p className={css.apartmentDescription}>
+            Кімнати : {apartment.rooms}
+          </p>
         </div>
 
         <div className={css.buttonContainer}>
           <button className={css.editButton} onClick={() => onEdit(apartment)}>
             Редагувати
           </button>
-          <button className={css.deleteButton} onClick={() => onDelete(apartment.id)}>
+          <button
+            className={css.deleteButton}
+            onClick={() => onDelete(apartment.id)}>
             Видалити
           </button>
         </div>
