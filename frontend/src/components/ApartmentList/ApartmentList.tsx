@@ -40,6 +40,11 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
   } | null>(null);
   const [photoIndex, setPhotoIndex] = useState<number | null>(null);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [filters, setFilters] = useState<{
+    priceMin?: string;
+    priceMax?: string;
+    rooms?: string;
+  }>({});
 
   useEffect(() => {
     dispatch(fetchApartments({}));
@@ -73,15 +78,17 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
     }
   };
 
-  const applyFilters = (filters: {
+  const applyFilters = (newFilters: {
     priceMin?: string;
     priceMax?: string;
     rooms?: string;
   }) => {
-    dispatch(fetchApartments(filters));
+    setFilters(newFilters);
+    dispatch(fetchApartments(newFilters));
   };
 
   const resetFilters = () => {
+    setFilters({});
     dispatch(fetchApartments({}));
   };
 
@@ -143,7 +150,12 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
       }
     }
   };
-  // _________________________________________________________________________
+
+  const shouldShowFilters =
+    apartments.length > 0 ||
+    Object.values(filters).some(value => value !== undefined && value !== '');
+
+  // ___________________________________________________________________________________________
   return (
     <>
       <div className={css.apartmentListContainer}>
@@ -151,8 +163,13 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
           Додати квартиру
         </button>
 
-        {apartments.length > 0 && <Filters onFilterChange={applyFilters} onResetFilters={resetFilters} />}
-        {/*<Filters onFilterChange={applyFilters} onResetFilters={resetFilters} />*/}
+        {shouldShowFilters && (
+          <Filters
+            filters={filters}
+            onFilterChange={applyFilters}
+            onResetFilters={resetFilters}
+          />
+        )}
 
         <button className={css.closeButton} onClick={onClose}>
           <img src={clear_icon} alt="clear_icon" />
@@ -177,6 +194,7 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                   Видалити
                 </button>
               </div>
+
               {/* #region apartmentPhotos */}
               {apartment.photos && apartment.photos.length > 0 && (
                 <div className={css.apartmentPhotos}>
@@ -187,13 +205,14 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                         key={photo}
                         src={`${BASE_URL}${photo}`}
                         alt={`photo: ${apartment.title}`}
-                        className={`${css.apartmentImage} ${selectedPhoto?.photo === photo ? css.activePhoto : ''}`}
+                        className={`${css.apartmentImage} ${
+                          selectedPhoto?.photo === photo ? css.activePhoto : ''
+                        }`}
                         onClick={() =>
                           handlePhotoClick(photo, apartment.id, index)
                         }
                       />
                     ))}
-                  {/* #endregion */}
 
                   {selectedPhoto?.apartmentId === apartment.id &&
                     isPhotoModalOpen && (
@@ -210,12 +229,13 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
                     )}
                 </div>
               )}
+              {/* #endregion */}
             </li>
           ))}
         </ul>
       </div>
 
-      {/* #region modalOverlay*/}
+      {/* #region modalOverlay */}
       {isModalOpen && (
         <div className={css.modalOverlay}>
           <ApartmentModal

@@ -34,7 +34,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
     setFormData({
       title: apartment?.title || '',
       description: apartment?.description || '',
-      price: apartment?.price || 10,
+      price: apartment?.price ?? 0,
       rooms: apartment?.rooms || 1,
       photos: [],
       photoPreviews: apartment?.photos || [],
@@ -47,7 +47,6 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
     >,
   ) => {
     const { name, value } = e.target;
-    // Якщо поле є числовим, перетворюємо значення у число
     setFormData(prev => ({
       ...prev,
       [name]:
@@ -140,12 +139,12 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
         setSuccess(false);
         onClose();
         await dispatch(fetchApartments({}));
-      }, 2000);
+      }, 500);
     } catch (error) {
       console.error('Error saving apartment:', error);
     }
   };
-
+// _____________________________________________________________________________________
   return (
     <div className={css.modalOverlay} onClick={onClose}>
       <div className={css.modal} onClick={e => e.stopPropagation()}>
@@ -175,7 +174,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             className={css.input}
             name="price"
             type="number"
-            value={formData.price}
+            value={formData.price || ''}
             onChange={handleChange}
             placeholder="Ціна"
             required

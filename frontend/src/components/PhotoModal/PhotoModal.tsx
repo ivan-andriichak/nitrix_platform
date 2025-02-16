@@ -15,76 +15,82 @@ interface PhotoModalContainerProps {
 }
 
 const PhotoModal: FC<PhotoModalContainerProps> = ({
-  apartment,
-  selectedPhoto,
-  photoIndex,
-  onClose,
-  onPrevPhoto,
-  onNextPhoto,
-  onEdit,
-  onDelete,
-}) => {
+                                                    apartment,
+                                                    selectedPhoto,
+                                                    photoIndex,
+                                                    onClose,
+                                                    onPrevPhoto,
+                                                    onNextPhoto,
+                                                    onEdit,
+                                                    onDelete,
+                                                  }) => {
   return (
-    <div className={css.photoModalContainer} onClick={onClose}>
-      <div className={css.photoModal} onClick={e => e.stopPropagation()}>
-        <button
-          className={css.photoModalPrev}
-          onClick={onPrevPhoto}
-          style={{
-            fontSize: '2rem',
-            margin: '5px',
-            opacity: photoIndex === 0 ? 0.5 : 1,
-            cursor: photoIndex === 0 ? 'not-allowed' : 'pointer',
-          }}
-          disabled={photoIndex === 0}>
-          ❮
+    <div className={css.overlay}>
+      <div className={css.photoModalContainer}>
+        <button className={css.closeButton} onClick={onClose}>
+          ✖
         </button>
 
-        {selectedPhoto && selectedPhoto.photo && (
-          <img
-            src={`${BASE_URL}${selectedPhoto.photo}`}
-            alt="Enlarged"
-            className={css.enlargedPhoto}
-          />
-        )}
+        <div className={css.photoModal}>
+          <button
+            className={css.photoModalPrev}
+            onClick={onPrevPhoto}
+            style={{
+              fontSize: '2rem',
+              margin: '5px',
+              opacity: photoIndex === 0 ? 0.5 : 1,
+              cursor: photoIndex === 0 ? 'not-allowed' : 'pointer',
+            }}
+            disabled={photoIndex === 0}>
+            ❮
+          </button>
 
-        <button
-          className={css.photoModalNext}
-          onClick={onNextPhoto}
-          style={{
-            fontSize: '2rem',
-            margin: '5px',
-            opacity:
-              photoIndex === (apartment.photos?.length ?? 0) - 1 ? 0.5 : 1,
-            cursor:
-              photoIndex === (apartment.photos?.length ?? 0) - 1
-                ? 'not-allowed'
-                : 'pointer',
-          }}
-          disabled={photoIndex === (apartment.photos?.length ?? 0) - 1}>
-          ❯
-        </button>
-      </div>
+          {selectedPhoto && selectedPhoto.photo && (
+            <img
+              src={`${BASE_URL}${selectedPhoto.photo}`}
+              alt="Enlarged"
+              className={css.enlargedPhoto}
+            />
+          )}
 
-      <div className={css.apartmentInfo}>
-        <div className={css.apartmentInfoText}>
-          <h3 className={css.apartmentTitle}>{apartment.title}</h3>
-          <p className={css.apartmentDescription}>{apartment.description}</p>
-          <p className={css.apartmentDescription}>Ціна: ${apartment.price}</p>
-          <p className={css.apartmentDescription}>
-            Кімнати : {apartment.rooms}
-          </p>
+          <button
+            className={css.photoModalNext}
+            onClick={onNextPhoto}
+            style={{
+              fontSize: '2rem',
+              margin: '5px',
+              opacity:
+                photoIndex === (apartment.photos?.length ?? 0) - 1 ? 0.5 : 1,
+              cursor:
+                photoIndex === (apartment.photos?.length ?? 0) - 1
+                  ? 'not-allowed'
+                  : 'pointer',
+            }}
+            disabled={photoIndex === (apartment.photos?.length ?? 0) - 1}>
+            ❯
+          </button>
         </div>
 
-        <div className={css.buttonContainer}>
-          <button className={css.editButton} onClick={() => onEdit(apartment)}>
-            Редагувати
-          </button>
-          <button
-            className={css.deleteButton}
-            onClick={() => onDelete(apartment.id)}>
-            Видалити
-          </button>
+        <div className={css.apartmentInfo}>
+          <div className={css.apartmentInfoText}>
+            <h3 className={css.apartmentTitle}>{apartment.title}</h3>
+            <p className={css.apartmentDescription}>{apartment.description}</p>
+            <p className={css.apartmentDescription}>Ціна: ${apartment.price}</p>
+            <p className={css.apartmentDescription}>
+              Кімнати : {apartment.rooms}
+            </p>
+          </div>
+
+          <div className={css.buttonContainer}>
+            <button className={css.editButton} onClick={() => onEdit(apartment)}>
+              Редагувати
+            </button>
+            <button
+              className={css.deleteButton}
+              onClick={() => onDelete(apartment.id)}>
+              Видалити
+            </button>
+          </div>
         </div>
       </div>
     </div>

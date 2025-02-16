@@ -9,7 +9,7 @@ export default [
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
-      parser: tsParser, // Додаємо TypeScript парсер
+      parser: tsParser,
       ecmaVersion: 2020,
       sourceType: 'module',
     },

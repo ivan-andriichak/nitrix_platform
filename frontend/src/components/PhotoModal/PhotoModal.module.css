@@ -82,3 +82,20 @@
 .deleteButton:hover {
   background-color: #c82333;
 }
+
+.closeButton {
+  position: absolute;
+  top: 90px;
+  right: 385px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: rgb(255, 254, 253);
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: black;
+}
+
