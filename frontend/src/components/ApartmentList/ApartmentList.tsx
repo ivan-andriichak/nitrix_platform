@@ -151,7 +151,8 @@ const ApartmentList: FC<GenresProps> = ({ onClose }) => {
           Додати квартиру
         </button>
 
-        <Filters onFilterChange={applyFilters} onResetFilters={resetFilters} />
+        {apartments.length > 0 && <Filters onFilterChange={applyFilters} onResetFilters={resetFilters} />}
+        {/*<Filters onFilterChange={applyFilters} onResetFilters={resetFilters} />*/}
 
         <button className={css.closeButton} onClick={onClose}>
           <img src={clear_icon} alt="clear_icon" />

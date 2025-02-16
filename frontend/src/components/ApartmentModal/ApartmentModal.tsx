@@ -46,7 +46,15 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    // Якщо поле є числовим, перетворюємо значення у число
+    setFormData(prev => ({
+      ...prev,
+      [name]:
+        name === 'price' || name === 'rooms'
+          ? Number(value)
+          : value,
+    }));
   };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +81,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
         setPhotosToRemove(prevRemove => [...prevRemove, removedPreview]);
       } else {
         const existingCount = prev.photoPreviews.filter(
-          url => !url.startsWith('blob:'),
+          url => !url.startsWith('blob:')
         ).length;
         if (index >= existingCount) {
           const newFileIndex = index - existingCount;
@@ -99,6 +107,12 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!apartment && formData.photoPreviews.length === 0) {
+      alert('Будь ласка, завантажте хоча б одне фото.');
+      return;
+    }
+
     const formDataToSend = new FormData();
     formDataToSend.append('title', formData.title);
     formDataToSend.append('description', formData.description);
@@ -114,7 +128,7 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
     try {
       if (apartment) {
         await dispatch(
-          updateApartment({ id: apartment.id, formData: formDataToSend }),
+          updateApartment({ id: apartment.id, formData: formDataToSend })
         );
       } else {
         await dispatch(addApartment(formDataToSend));
@@ -171,7 +185,8 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             name="rooms"
             value={formData.rooms}
             onChange={handleChange}
-            required>
+            required
+          >
             {[1, 2, 3].map(num => (
               <option key={num} value={num}>
                 {num} Квартира(ри)
@@ -194,16 +209,15 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
             {formData.photoPreviews.map((photo, index) => (
               <div key={index} className={css.photoPreviewWrapper}>
                 <img
-                  src={
-                    photo.startsWith('blob:') ? photo : `${BASE_URL}${photo}`
-                  }
-                  alt={`Перегляд: ${index}`}
+                  src={photo.startsWith('blob:') ? photo : `${BASE_URL}${photo}`}
+                  alt={`Preview: ${index}`}
                   className={css.photoPreview}
                 />
                 <button
                   type="button"
                   className={css.deletePhotoButton}
-                  onClick={() => handleDeletePreview(index)}>
+                  onClick={() => handleDeletePreview(index)}
+                >
                   Видалити
                 </button>
               </div>
@@ -215,7 +229,8 @@ const ApartmentModal: FC<ApartmentModalProps> = ({ apartment, onClose }) => {
               type="button"
               onClick={onClose}
               className={css.cancelButton}
-              disabled={success}>
+              disabled={success}
+            >
               Закрити
             </button>
             <button type="submit" className={css.saveButton} disabled={success}>
