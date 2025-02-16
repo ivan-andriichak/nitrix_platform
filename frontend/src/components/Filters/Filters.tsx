@@ -1,28 +1,33 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import css from './Filters.module.css';
 
 interface FiltersProps {
-  onFilterChange: (filters: {
+  filters: {
     priceMin?: string;
     priceMax?: string;
     rooms?: string;
-  }) => void;
+  };
+  onFilterChange: (filters: { priceMin?: string; priceMax?: string; rooms?: string }) => void;
   onResetFilters: () => void;
 }
 
-const Filters: FC<FiltersProps> = ({ onFilterChange, onResetFilters }) => {
-  const [priceMin, setPriceMin] = useState('');
-  const [priceMax, setPriceMax] = useState('');
-  const [rooms, setRooms] = useState('');
+const Filters: FC<FiltersProps> = ({ filters, onFilterChange, onResetFilters }) => {
+  const [localFilters, setLocalFilters] = useState(filters);
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
+
+  const handleChange = (key: keyof typeof localFilters, value: string) => {
+    setLocalFilters(prev => ({ ...prev, [key]: value }));
+  };
 
   const applyFilters = () => {
-    onFilterChange({ priceMin, priceMax, rooms });
+    onFilterChange(localFilters);
   };
 
   const resetFilters = () => {
-    setPriceMin('');
-    setPriceMax('');
-    setRooms('');
+    setLocalFilters({ priceMin: '', priceMax: '', rooms: '' });
     onResetFilters();
   };
 
@@ -30,34 +35,34 @@ const Filters: FC<FiltersProps> = ({ onFilterChange, onResetFilters }) => {
     <div className={css.filters}>
       <input
         placeholder="Мін. ціна"
-        value={priceMin}
-        onChange={e => setPriceMin(e.target.value)}
+        value={localFilters.priceMin || ''}
+        onChange={e => handleChange('priceMin', e.target.value)}
       />
       <input
         placeholder="Макс. ціна"
-        value={priceMax}
-        onChange={e => setPriceMax(e.target.value)}
+        value={localFilters.priceMax || ''}
+        onChange={e => handleChange('priceMax', e.target.value)}
       />
       <input
         type="number"
         placeholder="Кількість кімнат"
-        value={rooms}
+        value={localFilters.rooms || ''}
         onChange={e => {
           const value = parseInt(e.target.value, 10);
           if (!isNaN(value) && value > 0 && value <= 3) {
-            setRooms(e.target.value);
+            handleChange('rooms', e.target.value);
           }
         }}
       />
       <button className={css.editButton} onClick={applyFilters}>
         Застосувати
       </button>
-
       <button className={css.editButton} onClick={resetFilters}>
         Очистити
       </button>
     </div>
   );
 };
+
 
 export { Filters };

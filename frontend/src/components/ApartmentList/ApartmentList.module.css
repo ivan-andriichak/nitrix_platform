@@ -39,8 +39,9 @@
   position: absolute;
   top: 0;
   right: 2px;
-  z-index: 999;
 }
+
+
 
 .apartmentListItem {
   background-color: rgba(228, 230, 231, 0.9);

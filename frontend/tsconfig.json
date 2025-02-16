@@ -8,6 +8,7 @@
   "compilerOptions": {
     "composite": true,
     "incremental": true,
+    "noEmit": false,
     "outDir": "dist",
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],

@@ -15,15 +15,10 @@ app.use(
   cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: [
-      'Authorization',
-      'Content-Type',
-      'Origin',
-      'Access-Control-Allow-Origin',
-    ],
+    allowedHeaders: ['Authorization', 'Content-Type', 'Origin', 'Access-Control-Allow-Origin'],
     preflightContinue: false,
     optionsSuccessStatus: 200,
-  }),
+  })
 );
 
 app.use(express.json());
@@ -47,15 +42,12 @@ app.use('/apartments', limiter, apartmentRouter);
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(
-  '*',
-  (err: ApiError, req: Request, res: Response, next: NextFunction) => {
-    res.status(err.status || 500).json(err.message);
-    next(err);
-  },
-);
+app.use('*', (err: ApiError, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.status || 500).json(err.message);
+  next(err);
+});
 
-process.on('uncaughtException', e => {
+process.on('uncaughtException', (e) => {
   console.error('uncaughtException', e.message, e.stack);
   process.exit(1);
 });
