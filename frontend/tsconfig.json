@@ -4,9 +4,7 @@
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "compilerOptions": {
-    "composite": true,
     "incremental": true,
     "noEmit": false,
     "outDir": "dist",
@@ -14,6 +12,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declaration": true
   }
 }
