@@ -32,6 +32,7 @@ This project is designed to manage an apartment rental platform. It allows addin
 
 ## Setup Instructions
 
+
 ### 1. Clone the repository
 
 Clone the repository to your local machine:
@@ -41,7 +42,55 @@ $ git clone https://github.com/ivan-andriichak/nitrix_platform.git
 cd nitrix_platform
 ```
 
-### 2. Run the Application
+### 2. Build and Run with Docker
+   Using Docker Compose:
+
+   From the root directory (nitrix_platform), run:
+
+```markdown
+docker-compose up --build -d
+```
+
+- **What happens**:
+  - Builds and starts the backend (nitrix_plarform-backend-1) on port 5000,
+    accessible via Nginx.
+  - Starts MongoDB (nitrix_plarform-mongo-1) with the configured database.
+  - Builds the frontend and serves it via Nginx (nitrix_plarform-web-1) on port 80.
+- **Verify:**
+  - Open http://localhost in your browser to access the frontend.
+  - Test the API at http://localhost/api/apartments (e.g., using curl http://localhost/api/apartments).
+
+
+Stop the application:
+
+```markdown
+docker-compose down
+```
+
+### 3. Key Configuration Files
+ -  **docker-compose.yml:**
+ -  Defines services: backend, mongo, and web (Nginx).
+ -  Maps ports: Backend (5000:5000), Nginx (80:80).
+ -  Mounts uploads for persistent photo storage and dist for the frontend.
+ -  **backend/package.json:**
+ -  Scripts: build compiles TypeScript, start:prod runs the compiled app.
+   **frontend/package.json:**
+ -  Scripts: build compiles the frontend with Vite.
+   **nginx.conf:**
+ -  Configures Nginx to serve the frontend (/) and proxy API requests (/api/) to the backend.
+
+
+### 4. Using Swagger for API Testing
+
+The backend includes Swagger UI for interactive API documentation and testing.
+
+#### Access Swagger:
+- After starting the application with Docker, open your browser and navigate to:
+  http://localhost/api/docs/
+
+
+### 5. Local Development (Optional)
+If you prefer to run without Docker:
 
 ### Backend:
 
@@ -60,7 +109,17 @@ npm run build
 npm run dev-react 
 ```
 
+
+- **Note: npm run dev starts the Vite development server (default port: 5173).**
+ - Adjust baseURL in frontend/src/services/api.ts to http://localhost:5000/ for local development.
+
 ## Testing
 
-Make sure to test your application locally after setting up both the frontend and backend. Use Postman or any API client to test the API endpoints.
+ - **Docker: Use the browser to interact with the app at http://localhost. Check API endpoints with tools like Postman or curl.**     
+ - **Local: Test API endpoints (e.g., http://localhost:5000/apartments) and frontend separately.**
 
+## Notes
+
+Ensure the uploads directory exists in ./backend/uploads for photo storage.
+Photos are served through the backend at /api/uploads/....
+Adjust .env variables as needed for your environment (e.g., MongoDB connection string).

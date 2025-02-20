@@ -1,18 +1,17 @@
+import { existsSync } from 'node:fs';
+
 import { NextFunction, Request, Response } from 'express';
 import { unlink } from 'fs';
 import { promisify } from 'util';
 
 import { IApartment, MulterFile } from '../interfaces/apartment.interfaces';
 import { Apartment } from '../models/apartment.model';
+import path from 'path';
 
 const unlinkAsync = promisify(unlink);
 
 class ApartmentController {
-  public async create(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  public async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { title, description, price, rooms } = req.body as IApartment;
       const files = req.files as MulterFile[] | MulterFile | undefined;
@@ -20,7 +19,7 @@ class ApartmentController {
       let photos: string[] = [];
       if (files) {
         photos = Array.isArray(files)
-          ? files.map(file => `/uploads/${file.filename}`)
+          ? files.map((file) => `/uploads/${file.filename}`)
           : [`/uploads/${files.filename}`];
       }
 
@@ -44,11 +43,7 @@ class ApartmentController {
     }
   }
 
-  public async getAll(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const {
         priceMin,
@@ -73,11 +68,7 @@ class ApartmentController {
     }
   }
 
-  public async getById(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  public async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
       const apartment = await Apartment.findById(id);
@@ -93,11 +84,7 @@ class ApartmentController {
     }
   }
 
-  public async update(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  public async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
       const updates = req.body;
@@ -106,7 +93,7 @@ class ApartmentController {
       let newPhotos: string[] = [];
       if (files) {
         newPhotos = Array.isArray(files)
-          ? files.map(file => `/uploads/${file.filename}`)
+          ? files.map((file) => `/uploads/${file.filename}`)
           : [`/uploads/${files.filename}`];
       }
 
@@ -144,9 +131,7 @@ class ApartmentController {
 
       // Оновлення фотографій
       Object.assign(apartment, updates);
-      apartment.photos = apartment.photos.filter(
-        photo => !photosToRemove.includes(photo),
-      );
+      apartment.photos = apartment.photos.filter((photo) => !photosToRemove.includes(photo));
       apartment.photos.push(...newPhotos);
 
       const updatedApartment = await apartment.save();
@@ -156,11 +141,7 @@ class ApartmentController {
     }
   }
 
-  public async delete(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
       const apartment = await Apartment.findById(id);
@@ -172,11 +153,15 @@ class ApartmentController {
 
       // Видалення фотографій з файлової системи
       for (const photo of apartment.photos) {
-        const filePath = photo.replace('/uploads', 'uploads'); // Шлях до файлу в файловій системі
-        try {
-          await unlinkAsync(filePath);
-        } catch (error) {
-          console.error(error);
+        const filePath = path.join(__dirname, '..', photo.replace('/uploads', 'uploads')); // Коректний шлях
+        if (existsSync(filePath)) {
+          try {
+            await unlinkAsync(filePath);
+          } catch (error) {
+            console.error(`Error deleting file ${filePath}:`, error);
+          }
+        } else {
+          console.warn(`File not found for deletion: ${filePath}`);
         }
       }
 
@@ -188,11 +173,7 @@ class ApartmentController {
     }
   }
 
-  public async deleteAll(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  public async deleteAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       await Apartment.deleteMany({});
       res.status(200).json({ message: 'All apartments deleted successfully' });

@@ -11,6 +11,8 @@ import { ApiError } from './errors/api-errors';
 import { apartmentRouter } from './routes/apartment.routes';
 
 const app = express();
+app.set('trust proxy', 1);
+
 app.use(
   cors({
     origin: '*',
@@ -40,7 +42,7 @@ app.use(express.urlencoded({ extended: true })); // Декодує x-www-form-ur
 
 app.use('/apartments', limiter, apartmentRouter);
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/docs/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('*', (err: ApiError, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status || 500).json(err.message);
