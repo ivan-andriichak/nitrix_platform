@@ -117,6 +117,8 @@ npm run dev-react
 
  - **Docker: Use the browser to interact with the app at http://localhost. Check API endpoints with tools like Postman or curl.**     
  - **Local: Test API endpoints (e.g., http://localhost:5000/apartments) and frontend separately.**
+ - docker-compose down
+ - docker-compose up --build
 
 ## Notes
 

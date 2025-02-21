@@ -36,13 +36,13 @@ const limiter = rateLimit({
   },
 });
 app.use(limiter);
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.use(express.urlencoded({ extended: true })); // Декодує x-www-form-urlencoded
 
-app.use('/apartments', limiter, apartmentRouter);
+app.use('/api/apartments', limiter, apartmentRouter);
 
-app.use('/docs/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/docs/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('*', (err: ApiError, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status || 500).json(err.message);

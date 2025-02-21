@@ -2,11 +2,11 @@ import { existsSync } from 'node:fs';
 
 import { NextFunction, Request, Response } from 'express';
 import { unlink } from 'fs';
+import path from 'path';
 import { promisify } from 'util';
 
 import { IApartment, MulterFile } from '../interfaces/apartment.interfaces';
 import { Apartment } from '../models/apartment.model';
-import path from 'path';
 
 const unlinkAsync = promisify(unlink);
 

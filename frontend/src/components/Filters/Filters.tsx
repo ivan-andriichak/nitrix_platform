@@ -35,11 +35,13 @@ const Filters: FC<FiltersProps> = ({ filters, onFilterChange, onResetFilters }) 
     <div className={css.filters}>
       <input
         placeholder="Мін. ціна"
+        type="number"
         value={localFilters.priceMin || ''}
         onChange={e => handleChange('priceMin', e.target.value)}
       />
       <input
         placeholder="Макс. ціна"
+        type="number"
         value={localFilters.priceMax || ''}
         onChange={e => handleChange('priceMax', e.target.value)}
       />

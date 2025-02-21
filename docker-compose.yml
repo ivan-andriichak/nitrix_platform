@@ -2,35 +2,49 @@ version: '3'
 services:
   backend:
     build: ./backend
-    ports:
-      - "5000:5000"
     env_file:
       - ./backend/.env
     volumes:
-      - ./backend/uploads:/app/uploads
+      - ./backend:/app  # Синхронізуємо весь код бекенду
+      - /app/node_modules  # Виключаємо node_modules для уникнення конфліктів
+      - ./backend/uploads:/app/uploads  # Зберігаємо uploads для завантажених файлів
+    command: npm run start:dev  # Запускаємо бекенд у режимі розробки з nodemon
+#    ports:
+#      - "5000:5000"  # Відкриваємо порт для прямого доступу до бекенду
     depends_on:
       - mongo
-
+#_____________________________________________________________________
   frontend:
     build: ./frontend
-    # Увага: порт 3000 більше не потрібен, оскільки фронтенд тепер сервірується через Nginx
-    # ports:
-    #   - "3000:3000"
+    volumes:
+      - ./frontend:/app  # Синхронізуємо весь код фронтенду
+      - /app/node_modules  # Виключаємо node_modules
+    command: sh -c "npm run build && npm run watch"
+    environment:
+        - WATCHPACK_POLLING=true # Для стабільної роботи watch у Docker
     depends_on:
       - backend
-
+#______________________________________________________________________
   mongo:
     image: mongo
     env_file:
       - ./backend/.env
-
-  web:
-    image: nginx:alpine
-    ports:
-      - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./frontend/dist:/usr/share/nginx/html   # Монтуємо скомпільований фронтенд
-    depends_on:
-      - backend
-    restart: on-failure
+      - mongo-data:/data/db
+#______________________________________________________________________
+  web:
+      build:
+        context: .
+        dockerfile: web/Dockerfile
+      ports:
+        - "80:80"
+      volumes:
+        - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        - ./frontend/dist:/usr/share/nginx/html
+      depends_on:
+        - backend
+        - frontend
+      command: sh -c "nginx -g 'daemon off;' & while inotifywait -r -e modify,create,delete /usr/share/nginx/html; do nginx -s reload; done"
+      restart: on-failure
+volumes:
+  mongo-data:
