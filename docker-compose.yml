@@ -9,17 +9,19 @@ services:
       - /app/node_modules  # Виключаємо node_modules для уникнення конфліктів
       - ./backend/uploads:/app/uploads  # Зберігаємо uploads для завантажених файлів
     command: npm run start:dev  # Запускаємо бекенд у режимі розробки з nodemon
-#    ports:
-#      - "5000:5000"  # Відкриваємо порт для прямого доступу до бекенду
+    ports:
+      - "5000:5000"  # Відкриваємо порт для прямого доступу до бекенду
     depends_on:
       - mongo
 #_____________________________________________________________________
   frontend:
+    ports: # Для розробки
+      - "3000:3000"
     build: ./frontend
     volumes:
       - ./frontend:/app  # Синхронізуємо весь код фронтенду
       - /app/node_modules  # Виключаємо node_modules
-    command: sh -c "npm run build && npm run watch"
+    command: sh -c "npm run watch"
     environment:
         - WATCHPACK_POLLING=true # Для стабільної роботи watch у Docker
     depends_on:
