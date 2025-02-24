@@ -11,19 +11,16 @@ import { ApiError } from './errors/api-errors';
 import { apartmentRouter } from './routes/apartment.routes';
 
 const app = express();
+app.set('trust proxy', 1);
+
 app.use(
   cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: [
-      'Authorization',
-      'Content-Type',
-      'Origin',
-      'Access-Control-Allow-Origin',
-    ],
+    allowedHeaders: ['Authorization', 'Content-Type', 'Origin', 'Access-Control-Allow-Origin'],
     preflightContinue: false,
     optionsSuccessStatus: 200,
-  }),
+  })
 );
 
 app.use(express.json());
@@ -39,23 +36,20 @@ const limiter = rateLimit({
   },
 });
 app.use(limiter);
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.use(express.urlencoded({ extended: true })); // Декодує x-www-form-urlencoded
 
-app.use('/apartments', limiter, apartmentRouter);
+app.use('/api/apartments', limiter, apartmentRouter);
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/docs/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(
-  '*',
-  (err: ApiError, req: Request, res: Response, next: NextFunction) => {
-    res.status(err.status || 500).json(err.message);
-    next(err);
-  },
-);
+app.use('*', (err: ApiError, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.status || 500).json(err.message);
+  next(err);
+});
 
-process.on('uncaughtException', e => {
+process.on('uncaughtException', (e) => {
   console.error('uncaughtException', e.message, e.stack);
   process.exit(1);
 });

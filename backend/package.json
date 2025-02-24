@@ -4,11 +4,12 @@
   "description": "",
   "main": "src/main.ts",
   "scripts": {
-    "start:dev": "rimraf dist && tsc-watch --onSuccess \"npm run watch:server\"",
-    "watch:server": "nodemon --exec ts-node src/main.ts",
+    "build": "rimraf dist && tsc",
     "start:prod": "node ./dist/main.js",
+    "start:dev": "nodemon --exec ts-node src/main.ts --watch src --legacy-watch",
+    "watch:server": "nodemon --exec ts-node src/main.ts --watch src --legacy-watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "prepare": "husky && husky install"
+    "prepare": "husky"
   },
   "keywords": [
     "nodejs",
@@ -21,7 +22,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-fileupload": "^1.5.1",
-    "husky": "^9.1.7",
+    "glob": "^11.0.1",
     "joi": "^17.13.3",
     "mongoose": "^8.9.5",
     "multer": "^1.4.5-lts.1",
@@ -44,8 +45,9 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "express-rate-limit": "^5.3.0",
+    "express-rate-limit": "^7.5.0",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
     "lint-staged": "^15.4.2",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",

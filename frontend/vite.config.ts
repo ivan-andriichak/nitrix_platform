@@ -1,14 +1,19 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
-  server: {
-    proxy: {
-      '/api': 'http://localhost:5000',
-    },
-    host: true,
-    port: 3000, // Це дозволяє доступ по мережі
-  },
   plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    watch: {
+      usePolling: true,
+    },
+    proxy: {
+      '/api': {
+        target: 'http://backend:5000',
+        changeOrigin: true,
+      },
+    },
+  },
 });
