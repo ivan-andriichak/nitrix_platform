@@ -10,7 +10,10 @@ RUN npm install -g nodemon
 
 COPY . .
 
+RUN npm run build
+
 EXPOSE 5000
 
 # Запускаємо бекенд у режимі розробки через nodemon
 CMD ["npm", "run", "start:dev"]
+

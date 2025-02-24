@@ -47,10 +47,14 @@ cd nitrix_platform
 ### 2. Build and Run with Docker
 Using Docker Compose, you can run the entire application with live code reloading:
 
+- **Prerequisites**:
+  - Install [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/).
+  - Ensure Docker Desktop is running.
+
 From the root directory (nitrix_platform), run:
 
 ```markdown
-docker-compose up --build -d
+docker-compose up --build 
 ```
 
 - **What happens**:
