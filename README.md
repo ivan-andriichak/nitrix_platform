@@ -57,6 +57,15 @@ From the root directory (nitrix_platform), run:
 docker-compose up --build 
 ```
 
+```markdown
+ cd backend
+ npm install
+```
+```markdown
+ cd frontend
+ npm install
+```
+
 - **What happens**:
 
    - Backend: Builds and runs on port 5000 with nodemon for live reloading. Accessible at http://localhost:5000.
